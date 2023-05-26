@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyProgram", "MyProgram\MyPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildEvents", "BuildEvents\BuildEvents.csproj", "{456EC7C8-D9A7-473A-989A-EA12CF1FE897}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConditionalCompilation", "ConditionalCompilation\ConditionalCompilation.csproj", "{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
