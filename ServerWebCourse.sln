@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReSharper", "ReSharper\ReSharper.csproj", "{B3241BBC-9AD6-4AC5-BE2D-1D1643225284}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReSharper", "ReSharper\ReSharper.csproj", "{B3241BBC-9AD6-4AC5-BE2D-1D1643225284}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigFile", "ConfigFile\ConfigFile.csproj", "{99F65090-F102-43F3-91A0-12C20C9482B7}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "Library\Library.csproj", "{E8DC2748-3BF0-43BF-87BA-986631DA2EAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyProgram", "MyProgram\MyProgram.csproj", "{D17AA35E-4791-48A9-B85E-9101A180E721}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildEvents", "BuildEvents\BuildEvents.csproj", "{456EC7C8-D9A7-473A-989A-EA12CF1FE897}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{D17AA35E-4791-48A9-B85E-9101A180E721}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D17AA35E-4791-48A9-B85E-9101A180E721}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D17AA35E-4791-48A9-B85E-9101A180E721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456EC7C8-D9A7-473A-989A-EA12CF1FE897}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
