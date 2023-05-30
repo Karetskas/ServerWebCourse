@@ -13,9 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "Library\Library.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyProgram", "MyProgram\MyProgram.csproj", "{D17AA35E-4791-48A9-B85E-9101A180E721}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildEvents", "BuildEvents\BuildEvents.csproj", "{456EC7C8-D9A7-473A-989A-EA12CF1FE897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildEvents", "BuildEvents\BuildEvents.csproj", "{456EC7C8-D9A7-473A-989A-EA12CF1FE897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConditionalCompilation", "ConditionalCompilation\ConditionalCompilation.csproj", "{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConditionalCompilation", "ConditionalCompilation\ConditionalCompilation.csproj", "{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "Excel\Excel.csproj", "{CD798786-C190-4AF7-87D1-8807661EFAA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{231E5F37-F1D9-4B5F-8C26-FC9AFC8A862D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD798786-C190-4AF7-87D1-8807661EFAA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD798786-C190-4AF7-87D1-8807661EFAA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD798786-C190-4AF7-87D1-8807661EFAA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD798786-C190-4AF7-87D1-8807661EFAA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
