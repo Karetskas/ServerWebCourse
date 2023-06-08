@@ -60,7 +60,7 @@ namespace Academits.Karetskas.Excel
             worksheet.Cells.Style.Font.Size = 14;
             worksheet.Cells.AutoFitColumns();
 
-            var fileInfo = new FileInfo(@"PhoneBook.xlsx");
+            var fileInfo = new FileInfo("PhoneBook.xlsx");
             excelPackage.SaveAs(fileInfo);
         }
 
@@ -79,17 +79,7 @@ namespace Academits.Karetskas.Excel
 
             worksheet.Cells[row, column].Value = value;
 
-            worksheet.Cells[row, column].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-            worksheet.Cells[row, column].Style.Border.Bottom.Color.SetColor(borderColor);
-
-            worksheet.Cells[row, column].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-            worksheet.Cells[row, column].Style.Border.Left.Color.SetColor(borderColor);
-
-            worksheet.Cells[row, column].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-            worksheet.Cells[row, column].Style.Border.Right.Color.SetColor(borderColor);
-
-            worksheet.Cells[row, column].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-            worksheet.Cells[row, column].Style.Border.Top.Color.SetColor(borderColor);
+            worksheet.Cells[row, column].Style.Border.BorderAround(ExcelBorderStyle.Thin, borderColor);
 
             worksheet.Cells[row, column].Style.Fill.PatternType = ExcelFillStyle.Solid;
             worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(cellColor);

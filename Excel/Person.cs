@@ -58,7 +58,7 @@ namespace Academits.Karetskas.Excel
                 {
                     _ = phoneNumberUtil.Parse(value, null);
                 }
-                catch(NumberParseException)
+                catch (NumberParseException)
                 {
                     _phoneNumber = null;
 
@@ -81,7 +81,7 @@ namespace Academits.Karetskas.Excel
         {
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentNullException(nameof(text), $"Argument \"{nameof(text)}\" isn't null or empty.");
+                throw new ArgumentNullException(nameof(text), $"Argument \"{nameof(text)}\" is null or empty.");
             }
         }
 
@@ -90,7 +90,7 @@ namespace Academits.Karetskas.Excel
             if (number <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(number),
-                    $"Argument {nameof(number)} = {nameof(number)} out of range. The argument must be greater than 0.");
+                    $"Argument \"{nameof(number)}\" = {number} out of range. The argument must be greater than 0.");
             }
         }
     }
