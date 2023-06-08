@@ -1,4 +1,4 @@
-﻿namespace Academits.Karetskas.JsonCountries
+﻿namespace Academits.Karetskas.JsonCountries.JsonClasses
 {
     public sealed class Translation
     {

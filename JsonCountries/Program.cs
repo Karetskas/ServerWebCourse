@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Academits.Karetskas.JsonCountries.JsonClasses;
 
 namespace Academits.Karetskas.JsonCountries
 {
@@ -11,12 +12,14 @@ namespace Academits.Karetskas.JsonCountries
     {
         public static void Main()
         {
-            if (!File.Exists(@"countries.json"))
+            const string fileName = "countries.json";
+
+            if (!File.Exists(fileName))
             {
                 return;
             }
 
-            var jsonText = File.ReadAllText(@"Countries.json");
+            var jsonText = File.ReadAllText(fileName);
 
             if (string.IsNullOrEmpty(jsonText))
             {
@@ -32,8 +35,8 @@ namespace Academits.Karetskas.JsonCountries
 
             Console.OutputEncoding = Encoding.UTF8;
 
-            var totalPopulationCountries = countries.Aggregate(0L, (total, country) => total + country.Population);
-            Console.WriteLine($"Total population by countries = {totalPopulationCountries}");
+            var countriesTotalPopulation = countries.Aggregate(0L, (total, country) => total + country.Population);
+            Console.WriteLine($"Total population by countries = {countriesTotalPopulation}");
             Console.WriteLine();
 
             var currencies = countries

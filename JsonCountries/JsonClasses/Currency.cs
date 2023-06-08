@@ -1,4 +1,4 @@
-﻿namespace Academits.Karetskas.JsonCountries
+﻿namespace Academits.Karetskas.JsonCountries.JsonClasses
 {
     public sealed class Currency
     {
@@ -20,7 +20,7 @@
             set => _name = value;
         }
 
-        public string? Symbol
+        public string Symbol
         {
             get => CheckString(_symbol);
 
