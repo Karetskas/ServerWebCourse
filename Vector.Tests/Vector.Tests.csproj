@@ -24,9 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="VectorTask">
-      <HintPath>..\..\CourseCSharpOOP\Tasks\VectorTask\bin\Debug\net6.0\VectorTask.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\VectorTask\VectorTask.csproj" />
   </ItemGroup>
 
 </Project>
