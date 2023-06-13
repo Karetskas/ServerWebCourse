@@ -51,7 +51,7 @@ namespace Academits.Karetskas.Excel
                 SetCell(worksheet, i + 2, columnsNumber, people[i].FirstName, Color.Bisque, Color.Green, Color.Black);
 
                 columnsNumber++;
-                SetCell(worksheet, i + 2, columnsNumber, people[i].Age.ToString(), Color.Bisque, Color.Green, Color.Black);
+                SetCell(worksheet, i + 2, columnsNumber, people[i].Age, Color.Bisque, Color.Green, Color.Black);
 
                 columnsNumber++;
                 SetCell(worksheet, i + 2, columnsNumber, people[i].PhoneNumber, Color.Bisque, Color.Green, Color.Black);
@@ -73,10 +73,8 @@ namespace Academits.Karetskas.Excel
             }
         }
 
-        private static void SetCell(ExcelWorksheet worksheet, int row, int column, string? value, Color cellColor, Color borderColor, Color textColor)
+        private static void SetCell<T>(ExcelWorksheet worksheet, int row, int column, T value, Color cellColor, Color borderColor, Color textColor)
         {
-            value ??= "null";
-
             worksheet.Cells[row, column].Value = value;
 
             worksheet.Cells[row, column].Style.Border.BorderAround(ExcelBorderStyle.Thin, borderColor);
