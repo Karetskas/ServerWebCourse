@@ -40,7 +40,7 @@ namespace Academits.Karetskas.JsonCountries
             Console.WriteLine();
 
             var currencies = countries
-                .SelectMany(country => country.Currencies?.Select(currency => currency.Code) ?? Enumerable.Empty<string>())
+                .SelectMany(country => country.Currencies.Select(currency => currency.Code))
                 .Distinct()
                 .OrderBy(currencyCode => currencyCode)
                 .ToArray();
