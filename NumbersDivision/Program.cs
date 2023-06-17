@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using NLog;
 
-namespace NumbersDivision
+namespace Academits.Karetskas.NumbersDivision
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            var logger = LogManager.GetLogger("MyFirstLogger");
+
+            logger.Trace("Запуск программы.");
+
             var numbers = new List<double>
             {
                 0.43,
@@ -23,25 +28,26 @@ namespace NumbersDivision
                 -0.008338
             };
 
+            logger.Debug($"Список делителей: {string.Join(", ", numbers)}");
+            logger.Info("Создан набор делителей для деления чисел");
+
             const double divisibleNumber = 5;
 
             numbers.ForEach(divider =>
             {
-                double result;
-
                 try
                 {
-                    result = Division(divisibleNumber, divider);
+                    double result = Division(divisibleNumber, divider);
+
+                    logger.Debug("Деление чисел: {0} / {1} = {2}", divisibleNumber, divider, result);
                 }
-                catch(DivideByZeroException e)
+                catch (DivideByZeroException e)
                 {
-                    Console.WriteLine($"Error => {e}");
-
-                    return;
+                    logger.Error(e, "Попытка деления на ноль.");
                 }
-
-                Console.WriteLine($"{divisibleNumber} / {divider} = {result}");
             });
+
+            logger.Trace("Программа закончила свою работу.");
 
             Console.ReadKey();
         }
