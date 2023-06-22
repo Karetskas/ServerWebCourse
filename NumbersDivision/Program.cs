@@ -39,7 +39,7 @@ namespace Academits.Karetskas.NumbersDivision
                 {
                     double result = Division(divisibleNumber, divider);
 
-                    logger.Debug("Деление чисел: {0} / {1} = {2}", divisibleNumber, divider, result);
+                    logger.Debug("Деление чисел: {divisibleNumber} / {divider} = {result}", divisibleNumber, divider, result);
                 }
                 catch (DivideByZeroException e)
                 {
@@ -56,7 +56,7 @@ namespace Academits.Karetskas.NumbersDivision
         {
             const double epsilon = 1.0e-10;
 
-            if (number2 >= -epsilon && number2 <= epsilon)
+            if (Math.Abs(number2) <= epsilon)
             {
                 throw new DivideByZeroException($"The argument \"{nameof(number2)}\" = {nameof(number2)} isn't must be equal to 0.");
             }
