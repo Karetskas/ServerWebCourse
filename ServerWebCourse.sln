@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VectorTask", "VectorTask\Ve
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumbersDivision", "NumbersDivision\NumbersDivision.csproj", "{86127D88-7E48-49C4-83A5-89B693FF476E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoNet", "AdoNet\AdoNet.csproj", "{18247802-4537-4249-93F8-0824D3EBBAC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{86127D88-7E48-49C4-83A5-89B693FF476E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86127D88-7E48-49C4-83A5-89B693FF476E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86127D88-7E48-49C4-83A5-89B693FF476E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18247802-4537-4249-93F8-0824D3EBBAC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18247802-4537-4249-93F8-0824D3EBBAC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18247802-4537-4249-93F8-0824D3EBBAC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18247802-4537-4249-93F8-0824D3EBBAC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
