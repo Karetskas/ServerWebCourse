@@ -10,7 +10,7 @@ namespace Academits.Karetskas.AdoNet
     {
         static void Main()
         {
-            const string connectionString = "Server=Micron;Database=shop;Encrypt=True;TrustServerCertificate=True;Trusted_Connection=true;";
+            const string connectionString = "Server=Micron;Database=Shop;Encrypt=True;TrustServerCertificate=True;Trusted_Connection=true;";
 
             using var connection = new SqlConnection(connectionString);
             connection.Open();
@@ -19,10 +19,10 @@ namespace Academits.Karetskas.AdoNet
             PrintToConsole("1. Вывести общее количество товаров.", ConsoleColor.Blue, true, false);
             PrintToConsole("", ConsoleColor.White, false, true);
 
-            const string goodsRequestTotalCount = "SELECT COUNT(*)"
-                                        + "FROM product";
+            const string productsRequestTotalCount = "SELECT COUNT(*)"
+                                        + "FROM Product";
 
-            RunQuery(goodsRequestTotalCount, connection, command =>
+            RunQuery(productsRequestTotalCount, connection, command =>
             {
                 var result = Convert.ToInt32(command.ExecuteScalar());
                 var message = $"Общее количество товаров = {result}";
@@ -32,73 +32,64 @@ namespace Academits.Karetskas.AdoNet
 
             PrintToConsole("2. Создать некоторую категорию и товар.", ConsoleColor.Blue, true, true);
 
-            const string queryTableProductCategories = "SELECT * FROM productCategories";
+            const string queryTableProductCategory = "SELECT * FROM ProductCategory";
 
-            PrintTableFromSqlDataReader(connection, "productCategories", queryTableProductCategories);
+            PrintTableFromSqlDataReader(connection, "ProductCategory", queryTableProductCategory);
             PrintToConsole("Введите новую категорию продуктового товара: ", ConsoleColor.Gray, false, false);
             var newCategory = Console.ReadLine();
 
-            const string queryToWriteNewCategory = "INSERT INTO productCategories(name)"
-                              + "VALUES (@newCategory)";
+            const string queryToWriteNewCategory = "INSERT INTO ProductCategory(Name)"
+                              + "VALUES (@NewCategory)";
 
             RunQuery(queryToWriteNewCategory, connection, command =>
             {
-                command.Parameters.Add(new SqlParameter("@newCategory", newCategory)
-                {
-                    SqlDbType = SqlDbType.NVarChar
-                });
+                command.Parameters.Add(new SqlParameter("@NewCategory", newCategory));
 
                 command.ExecuteNonQuery();
             });
 
             PrintToConsole("", ConsoleColor.White, false, true);
-            PrintTableFromSqlDataReader(connection, "productCategories", queryTableProductCategories);
+            PrintTableFromSqlDataReader(connection, "ProductCategory", queryTableProductCategory);
 
-            const string queryTableProduct = "SELECT * FROM product";
+            const string queryTableProduct = "SELECT * FROM Product";
 
-            PrintTableFromSqlDataReader(connection, "product", queryTableProduct);
+            PrintTableFromSqlDataReader(connection, "Product", queryTableProduct);
 
             PrintToConsole("Введите следующую информацию о товаре:", ConsoleColor.Gray, true, false);
             PrintToConsole("Название товара: ", ConsoleColor.Gray, false, false);
-            var productsName = Console.ReadLine();
+            var productName = Console.ReadLine();
             PrintToConsole("Стоимость товара: ", ConsoleColor.Gray, false, false);
             _ = decimal.TryParse(Console.ReadLine(), out var productPrice);
             PrintToConsole("Выберите категорию товара из таблицы ниже:", ConsoleColor.Gray, true, false);
             PrintToConsole("", ConsoleColor.White, false, true);
-            PrintTableFromSqlDataReader(connection, "productCategories", queryTableProductCategories);
+            PrintTableFromSqlDataReader(connection, "ProductCategory", queryTableProductCategory);
             var productCategory = Console.ReadLine();
 
-            const string queryToWriteNewProduct = "INSERT INTO product(name, price, categoryId) "
-                                                  + "SELECT @productsName, @productPrice, productCategories.id "
-                                                  + "FROM productCategories "
-                                                  + "WHERE productCategories.name = @productCategory";
+            const string queryToWriteNewProduct = "INSERT INTO Product(Name, Price, CategoryId) "
+                                                  + "SELECT @ProductName, @ProductPrice, ProductCategory.Id "
+                                                  + "FROM ProductCategory "
+                                                  + "WHERE ProductCategory.Name = @ProductCategory";
 
             RunQuery(queryToWriteNewProduct, connection, command =>
             {
-                command.Parameters.Add(new SqlParameter("@productsName", productsName)
-                {
-                    SqlDbType = SqlDbType.NVarChar
-                });
+                command.Parameters.Add(new SqlParameter("@ProductName", productName));
 
-                command.Parameters.Add(new SqlParameter("@productPrice", productPrice)
+                command.Parameters.Add(new SqlParameter("@ProductPrice", productPrice)
                 {
                     SqlDbType = SqlDbType.Decimal
                 });
 
-                command.Parameters.Add(new SqlParameter("@productCategory", productCategory)
-                {
-                    SqlDbType = SqlDbType.NVarChar
-                });
+                command.Parameters.Add(new SqlParameter("@ProductCategory", productCategory));
 
                 command.ExecuteNonQuery();
             });
 
             PrintToConsole("", ConsoleColor.White, false, true);
-            PrintTableFromSqlDataReader(connection, "product", queryTableProduct);
+            PrintTableFromSqlDataReader(connection, "Product", queryTableProduct);
 
             PrintToConsole("3. Отредактировать некоторый товар.", ConsoleColor.Blue, true, true);
 
-            PrintTableFromSqlDataReader(connection, "product", queryTableProduct);
+            PrintTableFromSqlDataReader(connection, "Product", queryTableProduct);
             PrintToConsole("Введите имя товара который желаете отредактировать из таблицы \"Product\" выше: ",
                 ConsoleColor.Gray, false, false);
             var productName1 = Console.ReadLine();
@@ -106,18 +97,15 @@ namespace Academits.Karetskas.AdoNet
             PrintToConsole("Введите новую стоимость товара: ", ConsoleColor.Gray, false, false);
             _ = decimal.TryParse(Console.ReadLine(), out var productPrice1);
 
-            const string queryToChangeProductPrice = "UPDATE product "
-                                                     + "SET product.price = @productPrice1 "
-                                                     + "WHERE product.name = @productName1";
+            const string queryToChangeProductPrice = "UPDATE Product "
+                                                     + "SET Product.Price = @ProductPrice "
+                                                     + "WHERE Product.Name = @ProductName";
 
             RunQuery(queryToChangeProductPrice, connection, command =>
             {
-                command.Parameters.Add(new SqlParameter("@productName1", productName1)
-                {
-                    SqlDbType = SqlDbType.NVarChar
-                });
+                command.Parameters.Add(new SqlParameter("@ProductName", productName1));
 
-                command.Parameters.Add(new SqlParameter("@productPrice1", productPrice1)
+                command.Parameters.Add(new SqlParameter("@ProductPrice", productPrice1)
                 {
                     SqlDbType = SqlDbType.Decimal
                 });
@@ -126,47 +114,44 @@ namespace Academits.Karetskas.AdoNet
             });
 
             PrintToConsole("", ConsoleColor.White, false, true);
-            PrintTableFromSqlDataReader(connection, "product", queryTableProduct);
+            PrintTableFromSqlDataReader(connection, "Product", queryTableProduct);
 
             PrintToConsole("4. Удалить некоторый товар.", ConsoleColor.Blue, true, true);
-            PrintTableFromSqlDataReader(connection, "product", queryTableProduct);
+            PrintTableFromSqlDataReader(connection, "Product", queryTableProduct);
 
-            PrintToConsole("Выберите имя товара из таблицы \"product\" выше: ", ConsoleColor.Gray, false, false);
+            PrintToConsole("Выберите имя товара из таблицы \"Product\" выше: ", ConsoleColor.Gray, false, false);
             var productName2 = Console.ReadLine();
 
-            const string queryToDeleteProduct = "DELETE FROM product "
-                                                + "WHERE product.name = @productName2";
+            const string queryToDeleteProduct = "DELETE FROM Product "
+                                                + "WHERE Product.Name = @ProductName";
 
             RunQuery(queryToDeleteProduct, connection, command =>
             {
-                command.Parameters.Add(new SqlParameter("@productName2", productName2)
-                {
-                    SqlDbType = SqlDbType.NVarChar
-                });
+                command.Parameters.Add(new SqlParameter("@ProductName", productName2));
 
                 command.ExecuteNonQuery();
             });
 
             PrintToConsole("", ConsoleColor.White, false, true);
-            PrintTableFromSqlDataReader(connection, "product", queryTableProduct);
+            PrintTableFromSqlDataReader(connection, "Product", queryTableProduct);
 
             PrintToConsole("5. Выгрузить весь список товаров вместе с именами категорий через reader, и распечатайте все данные в цикле.",
                 ConsoleColor.Blue, true, true);
 
-            const string queryProductsListWithCategories1 = "SELECT product.name Product, productCategories.name Category "
-                                                           + "FROM product "
-                                                           + "INNER JOIN productCategories "
-                                                           + "  ON product.categoryId = productCategories.id";
+            const string queryProductsListWithCategories1 = "SELECT Product.Name Product, ProductCategory.Name Category "
+                                                           + "FROM Product "
+                                                           + "INNER JOIN ProductCategory "
+                                                           + "  ON Product.CategoryId = ProductCategory.Id";
 
             PrintTableFromSqlDataReader(connection, "Список товаров с категориями", queryProductsListWithCategories1);
 
             PrintToConsole("6. Выгрузить весь список товаров вместе с именами категорий в DataSet через SqlDataAdapter, и распечатайте все данные в цикле.",
                 ConsoleColor.Blue, true, true);
 
-            const string queryProductsListWithCategories2 = "SELECT product.name Product, productCategories.name Category "
-                                                           + "FROM product "
-                                                           + "INNER JOIN productCategories "
-                                                           + "  ON product.categoryId = productCategories.id";
+            const string queryProductsListWithCategories2 = "SELECT Product.Name Product, ProductCategory.Name Category "
+                                                           + "FROM Product "
+                                                           + "INNER JOIN ProductCategory "
+                                                           + "  ON Product.CategoryId = ProductCategory.Id";
 
             PrintTableFromDataSet(connection, "Список товаров с категориями через \"DataSet\"",
                 queryProductsListWithCategories2);
@@ -182,7 +167,7 @@ namespace Academits.Karetskas.AdoNet
 
             try
             {
-                var adapter = new SqlDataAdapter(query, connection);
+                using var adapter = new SqlDataAdapter(query, connection);
                 var dataSet = new DataSet();
                 adapter.Fill(dataSet);
 
@@ -329,9 +314,9 @@ namespace Academits.Karetskas.AdoNet
 
         private static void PrintTable(int[] maxColumnsWidth, int columnsCount, Func<int, (int spaces, string cellValue)> formHeader, Func<(int spaces, string cellValue)[,]> formBody)
         {
-            var widthAllColumns = maxColumnsWidth.Aggregate((total, column) => total + column);
+            var allColumnsWidth = maxColumnsWidth.Aggregate((total, column) => total + column);
 
-            PrintToConsole($" {new string('-', widthAllColumns + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
+            PrintToConsole($" {new string('-', allColumnsWidth + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
 
             for (var i = 0; i < columnsCount; i++)
             {
@@ -341,7 +326,7 @@ namespace Academits.Karetskas.AdoNet
             }
 
             PrintToConsole(" | ", ConsoleColor.DarkGreen, true, false);
-            PrintToConsole($" {new string('-', widthAllColumns + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
+            PrintToConsole($" {new string('-', allColumnsWidth + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
 
             var cells = formBody();
 
@@ -355,7 +340,7 @@ namespace Academits.Karetskas.AdoNet
                 PrintToConsole(" | ", ConsoleColor.DarkGreen, true, false);
             }
 
-            PrintToConsole($" {new string('-', widthAllColumns + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
+            PrintToConsole($" {new string('-', allColumnsWidth + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
             PrintToConsole("", ConsoleColor.White, false, true);
         }
 
@@ -373,14 +358,14 @@ namespace Academits.Karetskas.AdoNet
             }
         }
 
-        private static void PrintToConsole(string? message, ConsoleColor color, bool lineBreakEnabled, bool isAddingEmptyStringEnabled)
+        private static void PrintToConsole(string? message, ConsoleColor color, bool isLineBreakEnabled, bool isAddingEmptyStringEnabled)
         {
             CheckArgument(message);
             CheckArgument(color);
 
             Console.ForegroundColor = color;
 
-            if (lineBreakEnabled)
+            if (isLineBreakEnabled)
             {
                 Console.WriteLine(message);
             }
