@@ -71,7 +71,7 @@ namespace Academits.Karetskas.Transactions
             CheckArgument(connection);
             CheckArgument(query);
 
-            var transaction = connection!.BeginTransaction();
+            using var transaction = connection!.BeginTransaction();
 
             try
             {
