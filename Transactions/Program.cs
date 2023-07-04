@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace Academits.Karetskas.Transactions
 {
@@ -9,7 +9,7 @@ namespace Academits.Karetskas.Transactions
     {
         static void Main()
         {
-            const string connectionString = "Server=Micron;Database=shop;Encrypt=True;TrustServerCertificate=True;Trusted_Connection=True;";
+            const string connectionString = "Server=Micron;Database=Shop;Encrypt=True;TrustServerCertificate=True;Trusted_Connection=True;";
             using var connection = new SqlConnection(connectionString);
             connection.Open();
 
@@ -22,11 +22,11 @@ namespace Academits.Karetskas.Transactions
 
             PrintToConsole("Таблица категорий до изменения:", ConsoleColor.Gray, true, true);
 
-            const string queryTableProductCategories1 = "SELECT * FROM productCategories";
+            const string queryTableProductCategories1 = "SELECT * FROM ProductCategory";
 
             PrintTableFromSqlDataReader(connection, "Product categories", queryTableProductCategories1);
 
-            const string queryToAddProductCategory1 = "INSERT INTO productCategories(name) "
+            const string queryToAddProductCategory1 = "INSERT INTO ProductCategory(Name) "
                                                      + "VALUES (N'Sweets')";
 
             MakeTransaction(connection, queryToAddProductCategory1, () => throw new Exception("Error occurred during the transaction!"));
@@ -42,11 +42,11 @@ namespace Academits.Karetskas.Transactions
 
             PrintToConsole("Таблица категорий до изменения:", ConsoleColor.DarkYellow, true, true);
 
-            const string queryTableProductCategories2 = "SELECT * FROM productCategories";
+            const string queryTableProductCategories2 = "SELECT * FROM ProductCategory";
 
             PrintTableFromSqlDataReader(connection, "Product categories", queryTableProductCategories2);
 
-            const string queryToAddProductCategory2 = "INSERT INTO productCategories(name) "
+            const string queryToAddProductCategory2 = "INSERT INTO ProductCategory(Name) "
                                                      + "VALUES (N'Sweets')";
 
             try
@@ -169,9 +169,9 @@ namespace Academits.Karetskas.Transactions
 
         private static void PrintTable(int[] maxColumnsWidth, int columnsCount, Func<int, (int spaces, string cellValue)> formHeader, Func<(int spaces, string cellValue)[,]> formBody)
         {
-            var widthAllColumns = maxColumnsWidth.Aggregate((total, column) => total + column);
+            var allColumnsWidth = maxColumnsWidth.Aggregate((total, column) => total + column);
 
-            PrintToConsole($" {new string('-', widthAllColumns + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
+            PrintToConsole($" {new string('-', allColumnsWidth + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
 
             for (var i = 0; i < columnsCount; i++)
             {
@@ -181,7 +181,7 @@ namespace Academits.Karetskas.Transactions
             }
 
             PrintToConsole(" | ", ConsoleColor.DarkGreen, true, false);
-            PrintToConsole($" {new string('-', widthAllColumns + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
+            PrintToConsole($" {new string('-', allColumnsWidth + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
 
             var cells = formBody();
 
@@ -195,7 +195,7 @@ namespace Academits.Karetskas.Transactions
                 PrintToConsole(" | ", ConsoleColor.DarkGreen, true, false);
             }
 
-            PrintToConsole($" {new string('-', widthAllColumns + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
+            PrintToConsole($" {new string('-', allColumnsWidth + columnsCount * 3 + 1)}", ConsoleColor.DarkGreen, true, false);
             PrintToConsole("", ConsoleColor.White, false, true);
         }
 
@@ -213,14 +213,14 @@ namespace Academits.Karetskas.Transactions
             }
         }
 
-        private static void PrintToConsole(string? message, ConsoleColor color, bool lineBreakEnabled, bool isAddingEmptyStringEnabled)
+        private static void PrintToConsole(string? message, ConsoleColor color, bool isLineBreakEnabled, bool isAddingEmptyStringEnabled)
         {
             CheckArgument(message);
             CheckArgument(color);
 
             Console.ForegroundColor = color;
 
-            if (lineBreakEnabled)
+            if (isLineBreakEnabled)
             {
                 Console.WriteLine(message);
             }
