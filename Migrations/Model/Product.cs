@@ -18,6 +18,6 @@ namespace Academits.Karetskas.Migrations.Model
 
         public virtual ICollection<OrderItem> OrdersItems { get; set; } = new List<OrderItem>();
 
-        public virtual Supplier Supplier { get; set; } = new Supplier();
+        public virtual Supplier? Supplier { get; set; } = new Supplier();
     }
 }

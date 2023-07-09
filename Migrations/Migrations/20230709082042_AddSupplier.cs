@@ -14,8 +14,7 @@ namespace Academits.Karetskas.Migrations.Migrations
                 name: "SupplierId",
                 table: "product",
                 type: "int",
-                nullable: true,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Suppliers",
@@ -40,8 +39,7 @@ namespace Academits.Karetskas.Migrations.Migrations
                 table: "product",
                 column: "SupplierId",
                 principalTable: "Suppliers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />

@@ -149,7 +149,6 @@ namespace Academits.Karetskas.Migrations.Migrations
                         .HasDefaultValue(0m);
 
                     b.Property<int?>("SupplierId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -226,9 +225,7 @@ namespace Academits.Karetskas.Migrations.Migrations
                 {
                     b.HasOne("Academits.Karetskas.Migrations.Model.Supplier", "Supplier")
                         .WithMany("Products")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
                 });
