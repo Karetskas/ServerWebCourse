@@ -63,6 +63,7 @@ namespace Academits.Karetskas.AdoNet
             PrintToConsole("Выберите категорию товара из таблицы ниже:", ConsoleColor.Gray, true, false);
             PrintToConsole("", ConsoleColor.White, false, true);
             PrintTableFromSqlDataReader(connection, "ProductCategory", queryTableProductCategory);
+            PrintToConsole("Введите категорию товара: ", ConsoleColor.White, false, false);
             var productCategory = Console.ReadLine();
 
             const string queryToWriteNewProduct = "INSERT INTO Product(Name, Price, CategoryId) "
