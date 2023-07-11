@@ -6,11 +6,11 @@
 
         public int OrderId { get; set; }
 
-        public virtual Order Order { get; set; } = new Order();
+        public virtual Order Order { get; set; } = new();
 
         public int ProductId { get; set; }
 
-        public virtual Product Product { get; set; } = new Product();
+        public virtual Product Product { get; set; } = new();
 
         public int Count { get; set; }
     }

@@ -17,6 +17,8 @@ namespace Academits.Karetskas.Migrations
 
         public DbSet<Supplier> Suppliers { get; set; } = null!;
 
+        public DbSet<CategoryProduct> CategoriesProducts { get; set; } = null!;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -28,29 +30,22 @@ namespace Academits.Karetskas.Migrations
         {
             modelBuilder.Entity<Category>(builder =>
             {
-                builder.ToTable("category");
-
                 builder.Property(category => category.Name)
-                    .IsRequired()
                     .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Product>(builder =>
             {
-                builder.ToTable("product");
-
                 builder.Property(product => product.Name)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 builder.Property(product => product.Price)
-                    .IsRequired()
                     .HasPrecision(10, 2)
                     .HasDefaultValue(0.00);
 
                 builder.HasMany(product => product.Categories)
                     .WithMany(category => category.Products)
-                    .UsingEntity(j => j.ToTable("categoryProduct"));
+                    .UsingEntity<CategoryProduct>(categoryProductBuilder => categoryProductBuilder.ToTable("CategoryProduct"));
 
                 builder.HasOne(product => product.Supplier)
                     .WithMany(supplier => supplier.Products)
@@ -60,20 +55,15 @@ namespace Academits.Karetskas.Migrations
             modelBuilder.Entity<Supplier>(builder =>
             {
                 builder.Property(supplier => supplier.Name)
-                    .IsRequired()
                     .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Customer>(builder =>
             {
-                builder.ToTable("customer");
-
                 builder.Property(customer => customer.FirstName)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 builder.Property(customer => customer.LastName)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 builder.Property(customer => customer.SecondName)
@@ -91,10 +81,7 @@ namespace Academits.Karetskas.Migrations
 
             modelBuilder.Entity<Order>(builder =>
             {
-                builder.ToTable("order");
-
                 builder.Property(order => order.Date)
-                    .IsRequired()
                     .HasColumnType("date");
 
                 builder.HasOne(order => order.Customer)
@@ -104,19 +91,18 @@ namespace Academits.Karetskas.Migrations
                 builder.HasMany(order => order.Products)
                     .WithMany(product => product.Orders)
                     .UsingEntity<OrderItem>(
-                        j => j
+                        right => right
                             .HasOne(orderItem => orderItem.Product)
                             .WithMany(product => product.OrdersItems)
                             .HasForeignKey(orderItem => orderItem.ProductId),
-                        j => j
+                        left => left
                             .HasOne(orderItem => orderItem.Order)
                             .WithMany(order => order.OrdersItems)
                             .HasForeignKey(orderItem => orderItem.OrderId),
-                        j =>
+                        orderItemBuilder =>
                         {
-                            j.Property(orderItem => orderItem.Count).HasDefaultValue(0);
-                            j.HasKey(orderItem => orderItem.Id);
-                            j.ToTable("orderItem");
+                            orderItemBuilder.Property(orderItem => orderItem.Count).HasDefaultValue(0);
+                            orderItemBuilder.HasKey(orderItem => orderItem.Id);
                         });
             });
         }

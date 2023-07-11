@@ -4,6 +4,7 @@ using Academits.Karetskas.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Academits.Karetskas.Migrations.Migrations
 {
     [DbContext(typeof(ShopEfContext))]
-    partial class ShopEfContextModelSnapshot : ModelSnapshot
+    [Migration("20230711112831_ChangeTablesName")]
+    partial class ChangeTablesName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
