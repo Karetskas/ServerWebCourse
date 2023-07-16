@@ -16,7 +16,7 @@ namespace Academits.Karetskas.Migrations.Model
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-        public virtual ICollection<OrderItem> OrdersItems { get; set; } = new List<OrderItem>();
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
         public virtual Supplier? Supplier { get; set; } = new Supplier();
     }

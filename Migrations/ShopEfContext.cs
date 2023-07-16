@@ -13,7 +13,7 @@ namespace Academits.Karetskas.Migrations
 
         public DbSet<Order> Orders { get; set; } = null!;
 
-        public DbSet<OrderItem> OrdersItems { get; set; } = null!;
+        public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
         public DbSet<Supplier> Suppliers { get; set; } = null!;
 
@@ -93,11 +93,11 @@ namespace Academits.Karetskas.Migrations
                     .UsingEntity<OrderItem>(
                         right => right
                             .HasOne(orderItem => orderItem.Product)
-                            .WithMany(product => product.OrdersItems)
+                            .WithMany(product => product.OrderItems)
                             .HasForeignKey(orderItem => orderItem.ProductId),
                         left => left
                             .HasOne(orderItem => orderItem.Order)
-                            .WithMany(order => order.OrdersItems)
+                            .WithMany(order => order.OrderItems)
                             .HasForeignKey(orderItem => orderItem.OrderId),
                         orderItemBuilder =>
                         {
