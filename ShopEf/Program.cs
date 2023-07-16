@@ -16,20 +16,20 @@ namespace Academits.Karetskas.ShopEf
             Console.WriteLine("1. Найти самый часто покупаемый продукт");
             Console.WriteLine();
 
-            var ordersItems = dbContext.OrdersItems;
+            var orderItems = dbContext.OrderItems;
 
-            var popularProduct = ordersItems
+            var popularProduct = orderItems
                 .GroupBy(orderItem => orderItem.ProductId)
-                .Select(ordersItemsGroup => new
+                .Select(orderItemsGroup => new
                 {
-                    ordersItemsGroup.Single().Product.Name,
-                    Count = ordersItemsGroup.Sum(orderItem => orderItem.Count)
+                    orderItemsGroup.Single().Product.Name,
+                    Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
                 })
-                .Where(product => product.Count == ordersItems
+                .Where(product => product.Count == orderItems
                     .GroupBy(orderItem => orderItem.ProductId)
-                    .Select(ordersItemsGroup => new
+                    .Select(orderItemsGroup => new
                     {
-                        Count = ordersItemsGroup.Sum(orderItem => orderItem.Count)
+                        Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
                     })
                     .Max(orderItem => orderItem.Count));
 
@@ -52,7 +52,7 @@ namespace Academits.Karetskas.ShopEf
                     ordersGroup.Single().Customer.LastName,
                     ordersGroup.Single().Customer.FirstName,
                     ordersGroup.Single().Customer.SecondName,
-                    EachCustomerTotalSum = ordersGroup.SelectMany(orderItem => orderItem.OrdersItems)
+                    EachCustomerTotalSum = ordersGroup.SelectMany(orderItem => orderItem.OrderItems)
                         .Sum(orderItem => orderItem.Count * orderItem.Product.Price)
                 });
 
@@ -72,7 +72,7 @@ namespace Academits.Karetskas.ShopEf
                 {
                     categoriesProductsGroup.Single().Category.Name,
                     ProductsCount = categoriesProductsGroup
-                        .SelectMany(categoryProduct => categoryProduct.Product.OrdersItems)
+                        .SelectMany(categoryProduct => categoryProduct.Product.OrderItems)
                         .Sum(orderItem => orderItem.Count)
                 });
 
@@ -232,61 +232,61 @@ namespace Academits.Karetskas.ShopEf
 
             context.Orders.AddRange(order1, order2, order3, order4, order5);
 
-            order1.OrdersItems.Add(new OrderItem
+            order1.OrderItems.Add(new OrderItem
             {
                 Product = buckwheat,
                 Count = 1
             });
 
-            order1.OrdersItems.Add(new OrderItem
+            order1.OrderItems.Add(new OrderItem
             {
                 Product = chickenBreast,
                 Count = 4
             });
 
-            order1.OrdersItems.Add(new OrderItem
+            order1.OrderItems.Add(new OrderItem
             {
                 Product = chickenBreast,
                 Count = 3
             });
 
-            order2.OrdersItems.Add(new OrderItem
+            order2.OrderItems.Add(new OrderItem
             {
                 Product = tuna,
                 Count = 2
             });
 
-            order2.OrdersItems.Add(new OrderItem
+            order2.OrderItems.Add(new OrderItem
             {
                 Product = buckwheat,
                 Count = 1
             });
 
-            order3.OrdersItems.Add(new OrderItem
+            order3.OrderItems.Add(new OrderItem
             {
                 Product = chickenBreast,
                 Count = 2
             });
 
-            order3.OrdersItems.Add(new OrderItem
+            order3.OrderItems.Add(new OrderItem
             {
                 Product = yogurt,
                 Count = 1
             });
 
-            order4.OrdersItems.Add(new OrderItem
+            order4.OrderItems.Add(new OrderItem
             {
                 Product = tuna,
                 Count = 5
             });
 
-            order4.OrdersItems.Add(new OrderItem
+            order4.OrderItems.Add(new OrderItem
             {
                 Product = cheese,
                 Count = 3
             });
 
-            order5.OrdersItems.Add(new OrderItem
+            order5.OrderItems.Add(new OrderItem
             {
                 Product = yogurt,
                 Count = 2
