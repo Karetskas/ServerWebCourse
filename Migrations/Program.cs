@@ -64,7 +64,7 @@ namespace Academits.Karetskas.Migrations
 
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine("Вывести сколько товаров каждой категории купили:");
+            Console.WriteLine("3. Вывести сколько товаров каждой категории купили:");
             Console.WriteLine();
 
             var productsCountByCategory = dbContext.CategoriesProducts
