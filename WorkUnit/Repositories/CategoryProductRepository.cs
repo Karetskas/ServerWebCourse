@@ -6,6 +6,6 @@ namespace Academits.Karetskas.WorkUnit.Repositories
 {
     public class CategoryProductRepository : BaseEfRepository<CategoryProduct>, ICategoryProductRepository
     {
-        public CategoryProductRepository(DbContext context) : base(context) { }
+        public CategoryProductRepository(DbContext dbContext) : base(dbContext) { }
     }
 }

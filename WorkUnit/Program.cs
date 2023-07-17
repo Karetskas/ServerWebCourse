@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.WorkUnit.Model;
 using Academits.Karetskas.WorkUnit.UnitOfWork;
@@ -21,84 +20,48 @@ namespace Academits.Karetskas.WorkUnit
             Console.WriteLine("1. Найти самый часто покупаемый продукт");
             Console.WriteLine();
 
-            var orderItems = workUnit.GetRepository<IOrderItemRepository>().GetAll();
-
             try
             {
                 workUnit.BeginTransaction();
 
-                var popularProduct = orderItems
-                    .GroupBy(orderItem => orderItem.ProductId)
-                    .Select(orderItemsGroup => new
-                    {
-                        orderItemsGroup.First().Product.Name,
-                        Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
-                    })
-                    .Where(product => product.Count == orderItems
-                        .GroupBy(orderItem => orderItem.ProductId)
-                        .Select(orderItemsGroup => new
-                        {
-                            Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
-                        })
-                        .Max(orderItem => orderItem.Count));
+                var popularProduct = workUnit.GetRepository<IProductRepository>().GetPopularProduct();
 
                 workUnit.CommitTransaction();
 
                 Console.WriteLine("Самыми часто покупаемыми продуктами являются:");
-                
+
                 foreach (var product in popularProduct)
                 {
-                    Console.WriteLine($"{product.Name} = {product.Count}");
+                    Console.WriteLine($"{product.Item1} = {product.Item2}");
                 }
             }
             catch (Exception)
             {
                 workUnit.RollbackTransaction();
             }
-            
+
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("2. Найти сколько каждый клиент потратил денег за все время:");
             Console.WriteLine();
 
-            var orders = workUnit.GetRepository<IOrderRepository>().GetAll();
-
-            var eachCustomerTotalCost = orders
-                .GroupBy(order => order.CustomerId)
-                .Select(ordersGroup => new
-                {
-                    ordersGroup.First().Customer.LastName,
-                    ordersGroup.First().Customer.FirstName,
-                    ordersGroup.First().Customer.SecondName,
-                    EachCustomerTotalSum = ordersGroup.SelectMany(orderItem => orderItem.OrderItems)
-                        .Sum(orderItem => orderItem.Count * orderItem.Product.Price)
-                });
+            var eachCustomerTotalCost = workUnit.GetRepository<ICustomerRepository>().GetExpensesForAllTime();
 
             foreach (var customer in eachCustomerTotalCost)
             {
-                Console.WriteLine($"- {customer.LastName} {customer.FirstName} {customer.SecondName} потратил {customer.EachCustomerTotalSum:F2}");
+                Console.WriteLine($"- {customer.Item1} {customer.Item2} {customer.Item3} потратил {customer.Item4:F2}");
             }
-            
+
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("3. Вывести сколько товаров каждой категории купили:");
             Console.WriteLine();
 
-            var categoriesProducts = workUnit.GetRepository<ICategoryProductRepository>().GetAll();
-
-            var productsCountByCategory = categoriesProducts
-                .GroupBy(categoryProduct => categoryProduct.CategoryId)
-                .Select(categoriesProductsGroup => new
-                {
-                    categoriesProductsGroup.First().Category.Name,
-                    ProductsCount = categoriesProductsGroup
-                        .SelectMany(categoryProduct => categoryProduct.Product.OrderItems)
-                        .Sum(orderItem => orderItem.Count)
-                });
+            var productsCountByCategory = workUnit.GetRepository<ICategoryRepository>().GetProductsCountByCategory();
 
             foreach (var category in productsCountByCategory)
             {
-                Console.WriteLine($"- категория: {category.Name} = {category.ProductsCount}");
+                Console.WriteLine($"- категория: {category.Item1} = {category.Item2}");
             }
         }
 

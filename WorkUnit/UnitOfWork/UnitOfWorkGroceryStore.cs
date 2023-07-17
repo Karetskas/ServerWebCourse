@@ -1,21 +1,21 @@
 ﻿using System;
-using Academits.Karetskas.WorkUnit.Repositories;
-using Academits.Karetskas.WorkUnit.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Academits.Karetskas.WorkUnit.Repositories;
+using Academits.Karetskas.WorkUnit.Repositories.Interfaces;
 
 namespace Academits.Karetskas.WorkUnit.UnitOfWork
 {
-    public class UnitOfWorkGroceryStore: IUnitOfWork
+    public class UnitOfWorkGroceryStore : IUnitOfWork
     {
-        private DbContext _dbContext;
+        private readonly DbContext _dbContext;
         private IDbContextTransaction? _transaction;
 
-        public UnitOfWorkGroceryStore(DbContext context)
+        public UnitOfWorkGroceryStore(DbContext dbContext)
         {
-            _dbContext = context is null 
-                ? throw new ArgumentNullException(nameof(context), $"The argument \"{nameof(context)}\" = {context} is null.")
-                : context;
+            _dbContext = dbContext is null
+                ? throw new ArgumentNullException(nameof(dbContext), $"The argument \"{nameof(dbContext)}\" = {dbContext} is null.")
+                : dbContext;
         }
 
         public T GetRepository<T>() where T : class, IRepository
@@ -24,7 +24,7 @@ namespace Academits.Karetskas.WorkUnit.UnitOfWork
             {
                 return (new ProductRepository(_dbContext) as T)!;
             }
-            
+
             if (typeof(T) == typeof(IOrderRepository))
             {
                 return (new OrderRepository(_dbContext) as T)!;
@@ -34,7 +34,7 @@ namespace Academits.Karetskas.WorkUnit.UnitOfWork
             {
                 return (new OrderItemRepository(_dbContext) as T)!;
             }
-            
+
             if (typeof(T) == typeof(ICustomerRepository))
             {
                 return (new CustomerRepository(_dbContext) as T)!;
