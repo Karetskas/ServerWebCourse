@@ -11,7 +11,7 @@ namespace Academits.Karetskas.Migrations.Model
 
         public int CustomerId { get; set; }
 
-        public virtual Customer Customer { get; set; } = new();
+        public virtual Customer Customer { get; set; } = null!;
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
