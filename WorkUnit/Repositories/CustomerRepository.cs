@@ -19,16 +19,15 @@ namespace Academits.Karetskas.WorkUnit.Repositories
 
         public IQueryable<Tuple<string, string, string?, decimal>> GetExpensesForAllTime()
         {
-            var orders = _dbContext.Set<Order>().AsQueryable();
+            var customers = _dbContext.Set<Customer>().AsQueryable();
 
-            return orders
-                .GroupBy(order => order.CustomerId)
-                .Select(ordersGroup => Tuple.Create(ordersGroup.Single().Customer.LastName,
-                    ordersGroup.Single().Customer.FirstName,
-                    ordersGroup.Single().Customer.SecondName,
-                    ordersGroup.SelectMany(orderItem => orderItem.OrderItems)
-                        .Sum(orderItem => orderItem.Count * orderItem.Product.Price)
-                    ));
+            return customers
+                .Select(customer => Tuple.Create(customer.LastName,
+                    customer.FirstName,
+                    customer.SecondName,
+                    customer.Orders
+                        .SelectMany(order => order.OrderItems)
+                        .Sum(orderItem => orderItem.Count * orderItem.Product.Price)));
         }
     }
 }

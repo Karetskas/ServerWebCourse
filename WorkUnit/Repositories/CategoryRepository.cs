@@ -20,16 +20,14 @@ namespace Academits.Karetskas.WorkUnit.Repositories
 
         public IEnumerable<Tuple<string, int>> GetProductsCountByCategory()
         {
-            var categoriesProducts = _dbContext.Set<CategoryProduct>().AsQueryable();
+            var categoriesProducts = _dbContext.Set<Category>().AsQueryable();
 
             return categoriesProducts
-                .GroupBy(categoryProduct => categoryProduct.CategoryId)
-                .Select(categoriesProductsGroup =>
-                    Tuple.Create(categoriesProductsGroup.Single().Category.Name,
-                        categoriesProductsGroup
-                            .SelectMany(categoryProduct => categoryProduct.Product.OrderItems)
-                            .Sum(orderItem => orderItem.Count)
-                        ));
+                .Select(category =>
+                    Tuple.Create(category.Name,
+                        category.Products
+                            .SelectMany(product => product.OrderItems)
+                            .Sum(orderItem => orderItem.Count)));
         }
     }
 }

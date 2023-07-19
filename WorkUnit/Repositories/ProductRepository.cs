@@ -23,14 +23,14 @@ namespace Academits.Karetskas.WorkUnit.Repositories
             var orderItems = _dbContext.Set<OrderItem>().AsQueryable();
 
             return orderItems
-                .GroupBy(orderItem => orderItem.ProductId)
+                .GroupBy(orderItem => orderItem.Product)
                 .Select(orderItemsGroup => new
                 {
-                    orderItemsGroup.Single().Product.Name,
+                    orderItemsGroup.Key.Name,
                     Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
                 })
                 .Where(product => product.Count == orderItems
-                    .GroupBy(orderItem => orderItem.ProductId)
+                    .GroupBy(orderItem => orderItem.Product)
                     .Select(orderItemsGroup => new
                     {
                         Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
