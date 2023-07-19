@@ -18,15 +18,15 @@ namespace Academits.Karetskas.ShopEf
 
             var orderItems = dbContext.OrderItems;
 
-            var popularProduct = orderItems
-                .GroupBy(orderItem => orderItem.ProductId)
+            var popularProducts = orderItems
+                .GroupBy(orderItem => orderItem.Product)
                 .Select(orderItemsGroup => new
                 {
-                    orderItemsGroup.Single().Product.Name,
+                    orderItemsGroup.Key.Name,
                     Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
                 })
                 .Where(product => product.Count == orderItems
-                    .GroupBy(orderItem => orderItem.ProductId)
+                    .GroupBy(orderItem => orderItem.Product)
                     .Select(orderItemsGroup => new
                     {
                         Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
@@ -35,7 +35,7 @@ namespace Academits.Karetskas.ShopEf
 
             Console.WriteLine("Самыми часто покупаемыми продуктами являются:");
 
-            foreach (var product in popularProduct)
+            foreach (var product in popularProducts)
             {
                 Console.WriteLine($"{product.Name} = {product.Count}");
             }
@@ -45,14 +45,14 @@ namespace Academits.Karetskas.ShopEf
             Console.WriteLine("2. Найти сколько каждый клиент потратил денег за все время:");
             Console.WriteLine();
 
-            var eachCustomerTotalCost = dbContext.Orders
-                .GroupBy(order => order.CustomerId)
-                .Select(ordersGroup => new
+            var eachCustomerTotalCost = dbContext.Customers
+                .Select(customer => new
                 {
-                    ordersGroup.Single().Customer.LastName,
-                    ordersGroup.Single().Customer.FirstName,
-                    ordersGroup.Single().Customer.SecondName,
-                    EachCustomerTotalSum = ordersGroup.SelectMany(orderItem => orderItem.OrderItems)
+                    customer.LastName,
+                    customer.FirstName,
+                    customer.SecondName,
+                    EachCustomerTotalSum = customer.Orders
+                        .SelectMany(order => order.OrderItems)
                         .Sum(orderItem => orderItem.Count * orderItem.Product.Price)
                 });
 
@@ -66,14 +66,13 @@ namespace Academits.Karetskas.ShopEf
             Console.WriteLine("3. Вывести сколько товаров каждой категории купили:");
             Console.WriteLine();
 
-            var productsCountByCategory = dbContext.CategoriesProducts
-                .GroupBy(categoryProduct => categoryProduct.CategoryId)
-                .Select(categoriesProductsGroup => new
+            var productsCountByCategory = dbContext.Categories
+                .Select(category => new
                 {
-                    categoriesProductsGroup.Single().Category.Name,
-                    ProductsCount = categoriesProductsGroup
-                        .SelectMany(categoryProduct => categoryProduct.Product.OrderItems)
-                        .Sum(orderItem => orderItem.Count)
+                    category.Name,
+                    ProductsCount = category.Products
+                    .SelectMany(product => product.OrderItems)
+                    .Sum(orderItem => orderItem.Count)
                 });
 
             foreach (var category in productsCountByCategory)
