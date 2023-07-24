@@ -71,8 +71,8 @@ namespace Academits.Karetskas.ShopEf
                 {
                     category.Name,
                     ProductsCount = category.Products
-                    .SelectMany(product => product.OrderItems)
-                    .Sum(orderItem => orderItem.Count)
+                        .SelectMany(product => product.OrderItems)
+                        .Sum(orderItem => orderItem.Count)
                 });
 
             foreach (var category in productsCountByCategory)
