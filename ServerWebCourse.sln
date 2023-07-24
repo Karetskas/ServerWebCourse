@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopEf", "ShopEf\ShopEf.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migrations", "Migrations\Migrations.csproj", "{C983DA67-05FF-4296-A2E4-0C52506E0F2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkUnit", "WorkUnit\WorkUnit.csproj", "{8CD70F7C-30EF-467A-94ED-62E14E72E120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitOfWorkProject", "UnitOfWorkProject\UnitOfWorkProject.csproj", "{8CD70F7C-30EF-467A-94ED-62E14E72E120}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
