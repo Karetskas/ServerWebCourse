@@ -6,6 +6,6 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories.Interfaces
 {
     public interface ICategoryRepository : IGenericRepository<Category>
     {
-        IEnumerable<CategoryInfo> GetProductsCountByCategory();
+        List<CategoryInfo> GetProductsCountByCategory();
     }
 }

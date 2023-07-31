@@ -6,6 +6,6 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories.Interfaces
 {
     public interface ICustomerRepository : IGenericRepository<Customer>
     {
-        IEnumerable<CustomerInfo> GetExpensesForAllTime();
+        List<CustomerInfo> GetExpensesForAllTime();
     }
 }

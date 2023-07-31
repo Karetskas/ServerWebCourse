@@ -19,9 +19,9 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories
                 : dbContext;
         }
 
-        public IEnumerable<CategoryInfo> GetProductsCountByCategory()
+        public List<CategoryInfo> GetProductsCountByCategory()
         {
-            var categoriesProducts = _dbContext.Set<Category>().AsQueryable();
+            var categoriesProducts = _dbContext.Set<Category>();
 
             return categoriesProducts
                 .Select(category => new CategoryInfo(
@@ -29,7 +29,8 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories
                     category.Products
                         .SelectMany(product => product.OrderItems)
                         .Sum(orderItem => orderItem.Count)
-                ));
+                ))
+                .ToList();
         }
     }
 }

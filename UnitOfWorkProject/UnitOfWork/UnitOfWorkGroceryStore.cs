@@ -64,11 +64,12 @@ namespace Academits.Karetskas.UnitOfWorkProject.UnitOfWork
         {
             if (_transaction is not null)
             {
-                throw new TransactionException("Previous transaction not completed.");
+                throw new TransactionException("Transaction has already started.");
             }
 
+            CheckDisposed();
+
             _transaction = _dbContext.Database.BeginTransaction();
-            _isDisposed = false;
         }
 
         public void CommitTransaction()
@@ -85,18 +86,24 @@ namespace Academits.Karetskas.UnitOfWorkProject.UnitOfWork
         {
             if (_transaction is null)
             {
-                return;
+                throw new TransactionException("Transaction hasn't been started.");
             }
+
+            CheckDisposed();
 
             task();
 
+            _transaction.Dispose();
+            _transaction = null;
+
+        }
+
+        private void CheckDisposed()
+        {
             if (_isDisposed)
             {
                 throw new ObjectDisposedException(nameof(_dbContext), $"The \"{nameof(_dbContext)}\" object has already called Dispose.");
             }
-
-            _transaction.Dispose();
-            _transaction = null;
         }
 
         public void Dispose()
@@ -104,6 +111,13 @@ namespace Academits.Karetskas.UnitOfWorkProject.UnitOfWork
             if (_isDisposed)
             {
                 return;
+            }
+
+            if (_transaction is not null)
+            {
+                _transaction.Rollback();
+                _transaction.Dispose();
+                _transaction = null;
             }
 
             _dbContext.Dispose();

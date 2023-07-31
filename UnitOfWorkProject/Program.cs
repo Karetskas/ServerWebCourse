@@ -83,13 +83,14 @@ namespace Academits.Karetskas.UnitOfWorkProject
                 throw new ArgumentNullException(nameof(unitOfWork), $"The argument \"{nameof(unitOfWork)}\" is null.");
             }
 
-            var products = unitOfWork.GetRepository<IProductRepository>().FindProducts(name);
+            var productRepository = unitOfWork.GetRepository<IProductRepository>();
+            var products = productRepository.FindProducts(name);
 
             foreach (var product in products)
             {
                 product.Price = price;
 
-                unitOfWork.GetRepository<IProductRepository>().Update(product);
+                productRepository.Update(product);
             }
         }
 

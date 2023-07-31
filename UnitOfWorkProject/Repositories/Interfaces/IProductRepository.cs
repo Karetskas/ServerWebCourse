@@ -6,8 +6,8 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories.Interfaces
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
-        IEnumerable<PopularProduct> GetPopularProducts();
+        List<PopularProduct> GetPopularProducts();
 
-        IEnumerable<Product> FindProducts(string name);
+        List<Product> FindProducts(string name);
     }
 }

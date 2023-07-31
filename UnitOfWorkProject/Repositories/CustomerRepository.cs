@@ -19,9 +19,9 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories
                 : dbContext;
         }
 
-        public IEnumerable<CustomerInfo> GetExpensesForAllTime()
+        public List<CustomerInfo> GetExpensesForAllTime()
         {
-            var customers = _dbContext.Set<Customer>().AsQueryable();
+            var customers = _dbContext.Set<Customer>();
 
             return customers
                 .Select(customer => new CustomerInfo(
@@ -31,7 +31,8 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories
                     customer.Orders
                         .SelectMany(order => order.OrderItems)
                         .Sum(orderItem => orderItem.Count * orderItem.Product.Price)
-                ));
+                ))
+                .ToList();
         }
     }
 }

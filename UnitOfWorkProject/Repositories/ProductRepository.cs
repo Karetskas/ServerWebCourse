@@ -19,7 +19,7 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories
                 : dbContext;
         }
 
-        public IEnumerable<PopularProduct> GetPopularProducts()
+        public List<PopularProduct> GetPopularProducts()
         {
             var orderItems = _dbContext.Set<OrderItem>();
 
@@ -37,14 +37,15 @@ namespace Academits.Karetskas.UnitOfWorkProject.Repositories
                         Count = orderItemsGroup.Sum(orderItem => orderItem.Count)
                     })
                     .Max(orderItem => orderItem.Count))
-                .Select(popularProduct => new PopularProduct(popularProduct.Name, popularProduct.Count));
+                .Select(popularProduct => new PopularProduct(popularProduct.Name, popularProduct.Count))
+                .ToList();
         }
 
-        public IEnumerable<Product> FindProducts(string name)
+        public List<Product> FindProducts(string name)
         {
             return _dbContext.Set<Product>()
-                .AsQueryable()
-                .Where(product => product.Name == name);
+                .Where(product => product.Name == name)
+                .ToList();
         }
     }
 }
