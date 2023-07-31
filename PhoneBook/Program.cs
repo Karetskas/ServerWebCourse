@@ -1,6 +1,11 @@
+using System;
+using Academits.Karetskas.PhoneBook.DataAccess;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Academits.Karetskas.PhoneBook
 {
@@ -10,16 +15,41 @@ namespace Academits.Karetskas.PhoneBook
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            string dbConnectionString = builder.Configuration.GetConnectionString("PhoneBookConnection") ?? "";
+            builder.Services.AddDbContext<PhoneBookDbContext>(options =>
+            {
+                options.UseSqlServer(dbConnectionString)
+                    .UseLazyLoadingProxies();
+            }, ServiceLifetime.Transient, ServiceLifetime.Transient);
+            
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddTransient<DbInitializer>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    var dbInitializer = services.GetRequiredService<DbInitializer>();
+                    dbInitializer.Initialize();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while seeding the database.");
+
+                    throw;
+                }
+            }
+            
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                
                 app.UseHsts();
             }
 
