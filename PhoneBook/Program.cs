@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PhoneBook.BusinessLogic.Handlers;
 
 namespace Academits.Karetskas.PhoneBook
 {
@@ -25,6 +26,7 @@ namespace Academits.Karetskas.PhoneBook
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<DbInitializer>();
+            builder.Services.AddTransient<GetContactsHandler>(); 
 
             var app = builder.Build();
 
@@ -54,15 +56,22 @@ namespace Academits.Karetskas.PhoneBook
             }
 
             app.UseHttpsRedirection();
+
+            app.UseDefaultFiles();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
+            app.MapControllers();
+
+            app.MapFallbackToFile("index.html");
+
+            /*app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");*/
 
             app.Run();
         }
