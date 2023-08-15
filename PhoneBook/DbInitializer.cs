@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
 using Microsoft.EntityFrameworkCore;
@@ -22,23 +23,53 @@ namespace Academits.Karetskas.PhoneBook
 
             var ivanovII = new Contact
             {
-                FirstName = "Иван",
-                LastName = "Иванов",
-                SecondName = "Иванович"
+                FirstName = "Ivan",
+                LastName = "Ivanov",
+                SecondName = "Ivanovich",
+                PhoneNumbers = new List<PhoneNumber>
+                {
+                    new()
+                    {
+                        Phone = "+79054345433",
+                        PhoneType = PhoneNumberType.Mobile
+                    },
+
+                    new()
+                    {
+                        Phone = "2-22-22",
+                        PhoneType = PhoneNumberType.Home
+                    }
+                }
             };
             
             var PetrovPP = new Contact
             {
-                FirstName = "Петр",
-                LastName = "Петров",
-                SecondName = "Петрович"
+                FirstName = "Petr",
+                LastName = "Petrov",
+                SecondName = "Petrovich",
+                PhoneNumbers = new List<PhoneNumber>
+                {
+                    new()
+                    {
+                        Phone = "+79053453454",
+                        PhoneType = PhoneNumberType.Work
+                    }
+                }
             };
             
             var SidorovSS = new Contact
             {
-                FirstName = "Сидор",
-                LastName = "Сидоров",
-                SecondName = "Сидорович"
+                FirstName = "Sidor",
+                LastName = "Sidorov",
+                SecondName = "Sidorovich",
+                PhoneNumbers = new List<PhoneNumber>
+                {
+                    new()
+                    {
+                        Phone = "89080989899",
+                        PhoneType = PhoneNumberType.Mobile
+                    }
+                }
             };
 
             _context.Contacts.AddRange(ivanovII, PetrovPP, SidorovSS);

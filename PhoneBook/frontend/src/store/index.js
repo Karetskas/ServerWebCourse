@@ -25,18 +25,18 @@ export default new Vuex.Store({
     },
 
     actions: {
-        loadContacts({ comit }) {
-            comit("setIsLoading", true);
+        loadContacts({ commit }) {
+            commit("setIsLoading", true);
 
             return axios.get("/api/PhoneBook/GetContacts")
                 .then(response => {
-                    comit("setContacts", response.data);
+                    commit("setContacts", response.data);
                 })
                 .catch(() => {
                     alert("Не удалось загрузить контакты");
                 })
                 .then(() => {
-                    comit("setIsLoading", false);
+                    commit("setIsLoading", false);
                 });
         }
     },

@@ -13,13 +13,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(contactDto, i) in contacts" :key="contactDto.id">
+                <tr v-for="(contact, i) in contacts" :key="contact.id">
                     <td v-text="i + 1"></td>
-                    <td v-text="contactDto.LastName"></td>
-                    <td v-text="contactDto.FirstName"></td>
-                    <td v-text="contactDto.SecondName"></td>
+                    <td v-text="contact.lastName"></td>
+                    <td v-text="contact.firstName"></td>
+                    <td v-text="contact.secondName"></td>
                     <td>
-                        <div v-for="phoneNumber in contactDto.phoneNumbers" :key="phoneNumber.id">
+                        <div v-for="phoneNumber in contact.phoneNumbers" :key="phoneNumber.id">
                             {{ phoneNumber.phone }}
                         </div>
                     </td>
