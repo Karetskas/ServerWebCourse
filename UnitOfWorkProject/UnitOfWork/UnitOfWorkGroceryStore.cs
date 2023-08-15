@@ -22,6 +22,8 @@ namespace Academits.Karetskas.UnitOfWorkProject.UnitOfWork
 
         public T GetRepository<T>() where T : class, IRepository
         {
+            CheckDisposed();
+
             if (typeof(T) == typeof(IProductRepository))
             {
                 return (new ProductRepository(_dbContext) as T)!;
@@ -57,17 +59,19 @@ namespace Academits.Karetskas.UnitOfWorkProject.UnitOfWork
 
         public void Save()
         {
+            CheckDisposed();
+
             _dbContext.SaveChanges();
         }
 
         public void BeginTransaction()
         {
+            CheckDisposed();
+
             if (_transaction is not null)
             {
                 throw new TransactionException("Transaction has already started.");
             }
-
-            CheckDisposed();
 
             _transaction = _dbContext.Database.BeginTransaction();
         }
@@ -84,18 +88,17 @@ namespace Academits.Karetskas.UnitOfWorkProject.UnitOfWork
 
         private void CompleteTransaction(Action task)
         {
+            CheckDisposed();
+
             if (_transaction is null)
             {
                 throw new TransactionException("Transaction hasn't been started.");
             }
 
-            CheckDisposed();
-
             task();
 
             _transaction.Dispose();
             _transaction = null;
-
         }
 
         private void CheckDisposed()
