@@ -14,5 +14,9 @@ module.exports = {
                 target: "https://localhost:44361"
             }
         }
-    }
+    },
+
+    transpileDependencies: [
+      'vuetify'
+    ]
 };
