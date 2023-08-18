@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace Academits.Karetskas.PhoneBook
 {
@@ -19,62 +20,63 @@ namespace Academits.Karetskas.PhoneBook
         {
             _context.Database.Migrate();
 
-            // TODO: Добавить какие-то данные
-
-            var ivanovII = new Contact
+            if (!_context.Contacts.Any())
             {
-                FirstName = "Ivan",
-                LastName = "Ivanov",
-                SecondName = "Ivanovich",
-                PhoneNumbers = new List<PhoneNumber>
+                var ivanovII = new Contact
                 {
-                    new()
+                    FirstName = "Ivan",
+                    LastName = "Ivanov",
+                    SecondName = "Ivanovich",
+                    PhoneNumbers = new List<PhoneNumber>
                     {
-                        Phone = "+79054345433",
-                        PhoneType = PhoneNumberType.Mobile
-                    },
+                        new()
+                        {
+                            Phone = "+79054345433",
+                            PhoneType = PhoneNumberType.Mobile
+                        },
 
-                    new()
-                    {
-                        Phone = "2-22-22",
-                        PhoneType = PhoneNumberType.Home
+                        new()
+                        {
+                            Phone = "2-22-22",
+                            PhoneType = PhoneNumberType.Home
+                        }
                     }
-                }
-            };
+                };
             
-            var PetrovPP = new Contact
-            {
-                FirstName = "Petr",
-                LastName = "Petrov",
-                SecondName = "Petrovich",
-                PhoneNumbers = new List<PhoneNumber>
+                var PetrovPP = new Contact
                 {
-                    new()
+                    FirstName = "Petr",
+                    LastName = "Petrov",
+                    SecondName = "Petrovich",
+                    PhoneNumbers = new List<PhoneNumber>
                     {
-                        Phone = "+79053453454",
-                        PhoneType = PhoneNumberType.Work
+                        new()
+                        {
+                            Phone = "+79053453454",
+                            PhoneType = PhoneNumberType.Work
+                        }
                     }
-                }
-            };
+                };
             
-            var SidorovSS = new Contact
-            {
-                FirstName = "Sidor",
-                LastName = "Sidorov",
-                SecondName = "Sidorovich",
-                PhoneNumbers = new List<PhoneNumber>
+                var SidorovSS = new Contact
                 {
-                    new()
+                    FirstName = "Sidor",
+                    LastName = "Sidorov",
+                    SecondName = "Sidorovich",
+                    PhoneNumbers = new List<PhoneNumber>
                     {
-                        Phone = "89080989899",
-                        PhoneType = PhoneNumberType.Mobile
+                        new()
+                        {
+                            Phone = "89080989899",
+                            PhoneType = PhoneNumberType.Mobile
+                        }
                     }
-                }
-            };
+                };
 
-            _context.Contacts.AddRange(ivanovII, PetrovPP, SidorovSS);
+                _context.Contacts.AddRange(ivanovII, PetrovPP, SidorovSS);
 
-            _context.SaveChanges();
+                _context.SaveChanges();
+            }
         }
     }
 }
