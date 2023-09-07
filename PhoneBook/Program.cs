@@ -1,4 +1,5 @@
 using System;
+using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PhoneBook.BusinessLogic.Handlers;
 
 namespace Academits.Karetskas.PhoneBook
 {

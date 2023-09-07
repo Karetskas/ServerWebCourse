@@ -73,7 +73,64 @@ namespace Academits.Karetskas.PhoneBook
                     }
                 };
 
-                _context.Contacts.AddRange(ivanovII, PetrovPP, SidorovSS);
+                var OgurcovOO = new Contact
+                {
+                    FirstName = "Oleg",
+                    LastName = "Ogurcov",
+                    SecondName = "Olegovich",
+                    PhoneNumbers = new List<PhoneNumber>
+                    {
+                        new()
+                        {
+                            Phone = "89083289823",
+                            PhoneType = PhoneNumberType.Mobile
+                        },
+
+                        new()
+                        {
+                            Phone = "3-45-33",
+                            PhoneType = PhoneNumberType.Home
+                        },
+
+                        new()
+                        {
+                            Phone = "4-44-44",
+                            PhoneType = PhoneNumberType.Work
+                        }
+                    }
+                };
+
+                var PetrosyanPP = new Contact
+                {
+                    FirstName = "Petr",
+                    LastName = "Petrosyan",
+                    SecondName = "Petorvich",
+                    PhoneNumbers = new List<PhoneNumber>
+                    {
+                        new()
+                        {
+                            Phone = "2-45-73",
+                            PhoneType = PhoneNumberType.Home
+                        }
+                    }
+                };
+
+                var KirkorovKK = new Contact
+                {
+                    FirstName = "Kiril",
+                    LastName = "Kirkorov",
+                    SecondName = "Kirilovich",
+                    PhoneNumbers = new List<PhoneNumber>
+                    {
+                        new()
+                        {
+                            Phone = "+79080989899",
+                            PhoneType = PhoneNumberType.Mobile
+                        }
+                    }
+                };
+
+                _context.Contacts.AddRange(ivanovII, PetrovPP, SidorovSS, OgurcovOO, PetrosyanPP, KirkorovKK);
 
                 _context.SaveChanges();
             }

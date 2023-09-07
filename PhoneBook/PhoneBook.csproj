@@ -22,4 +22,8 @@
     <ProjectReference Include="..\PhoneBook.Dto\PhoneBook.Dto.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

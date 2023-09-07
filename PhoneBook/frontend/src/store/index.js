@@ -20,7 +20,20 @@ export default new Vuex.Store({
         },
 
         setContacts(state, contacts) {
-            state.contacts = contacts;
+
+            let contactsList = [];
+            let counter = 1;
+
+            for (let i = 0; i < contacts.length; i++) {
+                contactsList.push({
+                    serialNumber: counter++,
+                    lastName: contacts[i].lastName,
+                    firstName: contacts[i].firstName,
+                    phoneNumbers: contacts[i].phoneNumbers
+                });
+            }
+
+            state.contacts = contactsList;
         }
     },
 
@@ -33,7 +46,7 @@ export default new Vuex.Store({
                     commit("setContacts", response.data);
                 })
                 .catch(() => {
-                    alert("Не удалось загрузить контакты");
+                    alert("Failed to load contacts!");
                 })
                 .then(() => {
                     commit("setIsLoading", false);
