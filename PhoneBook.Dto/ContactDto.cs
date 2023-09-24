@@ -10,8 +10,6 @@ namespace Academits.Karetskas.PhoneBook.Dto
 
         public string LastName { get; set; } = null!;
 
-        //public string? SecondName { get; set; }
-
         public List<PhoneNumberDto> PhoneNumbers { get; set; } = new();
     }
 }

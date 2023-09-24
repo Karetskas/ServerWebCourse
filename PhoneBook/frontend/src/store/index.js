@@ -8,7 +8,11 @@ import axios from "axios";
 export default new Vuex.Store({
     state: {
         isLoading: false,
-        contacts: []
+        contacts: [],
+        errorMessage: {
+            enabled: false,
+            message: ""
+        }
     },
 
     getters: {
@@ -20,7 +24,6 @@ export default new Vuex.Store({
         },
 
         setContacts(state, contacts) {
-
             let contactsList = [];
             let counter = 1;
 
@@ -34,6 +37,16 @@ export default new Vuex.Store({
             }
 
             state.contacts = contactsList;
+        },
+
+        enableErrorMessage(state, value) {
+            state.errorMessage.enabled = true;
+            state.errorMessage.message = value;
+        },
+
+        disableErrorMessage(state) {
+            state.errorMessage.enabled = false;
+            state.errorMessage.message = "";
         }
     },
 
@@ -45,12 +58,14 @@ export default new Vuex.Store({
                 .then(response => {
                     commit("setContacts", response.data);
                 })
-                .catch(() => {
-                    alert("Failed to load contacts!");
-                })
-                .then(() => {
-                    commit("setIsLoading", false);
-                });
+                .catch((error) => commit("enableErrorMessage", error))
+                .finally(() => commit("setIsLoading", false));
+        },
+
+        addContact({ commit }, contact) {
+            return axios.post("/api/PhoneBook/AddContact", contact)
+                .then((resolve) => resolve.data)
+                .catch((error) => commit("enableErrorMessage", error));
         }
     },
 

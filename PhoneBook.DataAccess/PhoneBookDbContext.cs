@@ -20,9 +20,6 @@ namespace Academits.Karetskas.PhoneBook.DataAccess
 
                 builder.Property(contact => contact.FirstName)
                     .HasMaxLength(50);
-
-                builder.Property(contact => contact.SecondName)
-                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<PhoneNumber>(builder =>

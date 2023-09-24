@@ -26,7 +26,6 @@ namespace Academits.Karetskas.PhoneBook
                 {
                     FirstName = "Ivan",
                     LastName = "Ivanov",
-                    SecondName = "Ivanovich",
                     PhoneNumbers = new List<PhoneNumber>
                     {
                         new()
@@ -47,7 +46,6 @@ namespace Academits.Karetskas.PhoneBook
                 {
                     FirstName = "Petr",
                     LastName = "Petrov",
-                    SecondName = "Petrovich",
                     PhoneNumbers = new List<PhoneNumber>
                     {
                         new()
@@ -62,7 +60,6 @@ namespace Academits.Karetskas.PhoneBook
                 {
                     FirstName = "Sidor",
                     LastName = "Sidorov",
-                    SecondName = "Sidorovich",
                     PhoneNumbers = new List<PhoneNumber>
                     {
                         new()
@@ -77,7 +74,6 @@ namespace Academits.Karetskas.PhoneBook
                 {
                     FirstName = "Oleg",
                     LastName = "Ogurcov",
-                    SecondName = "Olegovich",
                     PhoneNumbers = new List<PhoneNumber>
                     {
                         new()
@@ -104,7 +100,6 @@ namespace Academits.Karetskas.PhoneBook
                 {
                     FirstName = "Petr",
                     LastName = "Petrosyan",
-                    SecondName = "Petorvich",
                     PhoneNumbers = new List<PhoneNumber>
                     {
                         new()
@@ -119,7 +114,6 @@ namespace Academits.Karetskas.PhoneBook
                 {
                     FirstName = "Kiril",
                     LastName = "Kirkorov",
-                    SecondName = "Kirilovich",
                     PhoneNumbers = new List<PhoneNumber>
                     {
                         new()

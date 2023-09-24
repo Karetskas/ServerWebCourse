@@ -25,20 +25,18 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
                     Id = contact.Id,
                     FirstName = contact.FirstName,
                     LastName = contact.LastName,
-                    //SecondName = contact.SecondName,
                     PhoneNumbers = contact.PhoneNumbers
                         .Select(phoneNumber => new PhoneNumberDto
                         {
                             Id = phoneNumber.Id,
                             Phone = phoneNumber.Phone,
-                            PhoneType = phoneNumber.PhoneType.ToString()
+                            PhoneType = phoneNumber.PhoneType
                         })
                         .OrderBy(phoneNumberDto => phoneNumberDto.Phone)
                         .ToList()
                 })
                 .OrderBy(contactDto => contactDto.LastName)
                 .ThenBy(contactDto => contactDto.FirstName)
-                //.ThenBy(contactDto => contactDto.SecondName)
                 .ToList();
         }
     }

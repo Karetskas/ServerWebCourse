@@ -10,8 +10,6 @@ namespace Academits.Karetskas.PhoneBook.DataAccess.Model
 
         public string LastName { get; set; } = null!;
 
-        public string? SecondName { get; set; }
-
         public virtual ICollection<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
     }
 }

@@ -1,52 +1,35 @@
 <template>
     <v-app>
-        <v-app-bar app height="60" class="pa-0">
-            <v-container class="pa-0">
-                <v-row class="d-flex align-center ">
-                    <v-col cols="4"
-                           class="pa-0">
-                        <v-btn block
-                               text
-                               tile
-                               class="pa-0 rounded-l-xl button-font deep-purple--text text--darken-1 font-weight-black"
-                               @click="changeHomeMenuTabColor"
-                               :class="changeMenuTabColor(isChangedHomeMenuTabColor)">
-                            <v-icon class="mdi mdi-home mr-1"></v-icon>
-                            Home
-                        </v-btn>
-                    </v-col>
+        <v-card>
+            <v-tabs v-model="tabs"
+                    grow 
+                    show-arrows
+                    background-color="indigo lighten-4"
+                    color="deep-purple darken-4"
+                    slider-size="4">
+                <v-tab v-for="item in items"
+                       :key="item.tab"
+                       :to="item.route"
+                       class="font-weight-bold">
+                    <v-icon :class="item.icon"
+                            class="mr-1"></v-icon>
+                    {{item.tab}}
+                </v-tab>
+            </v-tabs>
 
-                    <v-col cols="4"
-                           class="pa-0">
-                        <v-btn block
-                               text
-                               tile
-                               class="pa-0 button-font deep-purple--text text--darken-1 font-weight-black"
-                               @click="changeAddMenuTabColor"
-                               :class="changeMenuTabColor(isChangedAddMenuTabColor)">
-                            <v-icon class="mdi mdi-account-plus mr-1"></v-icon>
-                            Add
-                        </v-btn>
-                    </v-col>
+            <main class="ma-2">
+                <v-alert :value="$store.state.errorMessage.enabled"
+                         @input="$store.commit('disableErrorMessage')"
+                         shaped
+                         dismissible
+                         type="error"
+                         elevation="10">
+                    {{$store.state.errorMessage.message}}
+                </v-alert>
 
-                    <v-col cols="4"
-                           class="pa-0">
-                        <v-btn block
-                               text
-                               tile
-                               class="pa-0 rounded-r-xl button-font deep-purple--text text--darken-1 font-weight-black"
-                               @click="changeViewMenuTabColor"
-                               :class="changeMenuTabColor(isChangedViewMenuTabColor)">
-                            <v-icon class="mdi mdi-card-account-details mr-1"></v-icon>
-                            View
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-app-bar>
-        <v-main class="mx-2">
-            <router-view></router-view>
-        </v-main>
+                <router-view></router-view>
+            </main>
+        </v-card>
     </v-app>
 </template>
 
@@ -54,70 +37,25 @@
     export default {
         data: () => {
             return {
-                isChangedHomeMenuTabColor: true,
-                isChangedAddMenuTabColor: false,
-                isChangedViewMenuTabColor: false
+                tabs: null,
+                items: [
+                    { tab: "HOME", route: "/", icon: "mdi mdi-home" },
+                    { tab: "ADD", route: "/AddContact", icon: "mdi mdi-account-plus" },
+                    { tab: "VIEW", route: "/ViewContacts", icon: "mdi mdi-card-account-details" },
+                ]
             }
         },
 
         computed: {
-
+            
         },
 
         watch: {
-            isChangedHomeMenuTabColor(val) {
-                if (val) {
-                    this.isChangedAddMenuTabColor = false;
-                    this.isChangedViewMenuTabColor = false;
-                }
-            },
 
-            isChangedAddMenuTabColor(val) {
-                if (val) {
-                    this.isChangedHomeMenuTabColor = false;
-                    this.isChangedViewMenuTabColor = false;
-                }
-            },
-
-            isChangedViewMenuTabColor(val) {
-                if (val) {
-                    this.isChangedHomeMenuTabColor = false;
-                    this.isChangedAddMenuTabColor = false;
-                }
-            }
         },
 
         methods: {
-            changeHomeMenuTabColor() {
-                this.isChangedHomeMenuTabColor = true;
-                this.followLink("/");
-            },
 
-            changeAddMenuTabColor() {
-                this.isChangedAddMenuTabColor = true;
-                this.followLink("/AddContact");
-            },
-
-            changeViewMenuTabColor() {
-                this.isChangedViewMenuTabColor = true;
-
-                //this.$store.dispatch("loadContacts");
-
-                this.followLink("/ViewContacts");
-            },
-
-            changeMenuTabColor(selectedTab) {
-                return selectedTab ? "green lighten-4" : "indigo lighten-4"
-            },
-
-            followLink(link) {
-                this.$router.push(link)
-                    .catch(error => {
-                        if (error.name != "NavigationDublicated" && !error.message.includes('Avoided redundant navigation to current location')) {
-                            console.log(error);
-                        }
-                    });
-            }
         }
     }
 </script>

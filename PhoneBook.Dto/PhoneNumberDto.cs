@@ -8,6 +8,6 @@ namespace Academits.Karetskas.PhoneBook.Dto
 
         public string Phone { get; set; } = null!;
 
-        public string PhoneType { get; set; } = null!;
+        public PhoneNumberType PhoneType { get; set; }
     }
 }

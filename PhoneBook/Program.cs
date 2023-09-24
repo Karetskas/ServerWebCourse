@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,14 @@ namespace Academits.Karetskas.PhoneBook
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<DbInitializer>();
-            builder.Services.AddTransient<GetContactsHandler>(); 
+            builder.Services.AddTransient<GetContactsHandler>();
+            builder.Services.AddTransient<AddContactHandler>();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             var app = builder.Build();
 
