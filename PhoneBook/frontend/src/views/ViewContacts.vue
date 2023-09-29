@@ -8,21 +8,21 @@
             </v-col>
 
             <v-col>
-                <v-data-table v-model="selected"
+                <v-data-table v-model="selectedContacts"
                               :headers="headers"
                               :items="checkContacts"
-                              :items-per-page="4"
-                              :single-select="singleSelect"
+                              :items-per-page="5"
                               :footer-props="{
                                 showFirstLastPage: false,
-                                itemsPerPageOptions: [4, 5, 10, 50],
+                                itemsPerPageOptions: [5, 10, 50],
                                 showCurrentPage: true
                               }"
                               :loading="$store.state.isLoading"
                               loading-text="Loading... Please wait!"
                               item-key="serialNumber"
                               class="elevation-1 deep-purple--text text--darken-3 indigo lighten-5"
-                              show-select>
+                              show-select
+                              hide-default-footer>
                     <template v-slot:header.serialNumber="{ header }">
                         <span class="deep-purple--text text--darken-3 text-subtitle-1 font-weight-bold">{{header.text}}</span>
                     </template>
@@ -37,6 +37,18 @@
 
                     <template v-slot:header.phoneNumbers="{ header }">
                         <span class="deep-purple--text text--darken-3 text-subtitle-1 font-weight-bold">{{header.text}}</span>
+                    </template>
+
+                    <template v-slot:header.action="{ header }">
+                        <span class="deep-purple--text text--darken-3 text-subtitle-1 font-weight-bold">{{header.text}}</span>
+                    </template>
+
+                    <template v-slot:item.action="{  }">
+                        <v-btn class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black"
+                               elevation="3"
+                               block>
+                            <v-icon class="mdi mdi-delete-forever"></v-icon>
+                        </v-btn>
                     </template>
 
                     <template v-slot:item.phoneNumbers="{ item }">
@@ -95,28 +107,48 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="3" class="d-flex align-center">
-                                    <v-btn elevation="5"
+                                    <v-btn :disabled="disabledDeleteButton"
+                                           elevation="5"
                                            block
                                            class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black">
                                         <v-icon class="mdi mdi-delete"></v-icon>
                                     </v-btn>
                                 </v-col>
 
-                                <v-col cols="9">
-                                    <v-text-field clearable
+                                <v-col cols="9" class="d-flex align-center">
+                                    <v-text-field v-model.trim="searchFilter"
+                                                  clearable
                                                   outlined
                                                   dense
                                                   label="Search filter"
-                                                  prepend-icon="mdi-account-search"
                                                   background-color="indigo lighten-5"
                                                   color="deep-purple darken-5"
                                                   placeholder="Find a phone or a person"
                                                   hide-details
-                                                  class="text-field-color font-weight-bold">
+                                                  class="text-field-color font-weight-bold rounded-r-0 rounded-xl">
                                     </v-text-field>
+
+                                    <v-btn :disabled="disabledSearchButton"
+                                           elevation="0" 
+                                           small 
+                                           height="100%"
+                                           class="green lighten-3 deep-purple--text text--darken-1 font-weight-black rounded-l-0 rounded-xl px-0">
+                                        <v-icon class="mdi mdi-account-search"></v-icon>
+                                    </v-btn>
                                 </v-col>
                             </v-row>
                         </v-container>
+                    </template>
+
+                    <!--created v-if-->
+                    <template v-slot:footer>
+                        <v-pagination v-model="pagination.page"
+                                      :length="pagination.length"
+                                      total-visible="7"
+                                      color="indigo lighten-4"
+                                      navigation-text-color="deep-purple darken-1"
+                                      class="pagination-text-color">
+                        </v-pagination>
                     </template>
                 </v-data-table>
             </v-col>
@@ -128,8 +160,7 @@
     export default {
         data() {
             return {
-                selected: [],
-                singleSelect: false,
+                selectedContacts: [],
                 headers: [
                     {
                         text: "#",
@@ -150,14 +181,39 @@
                         text: "Phone number",
                         value: "phoneNumbers",
                         align: "center"
+                    },
+                    {
+                        text: "Action",
+                        value: "action",
+                        align: "center"
                     }
-                ]
+                ],
+                
+                disabledDeleteButton: true,
+                disabledSearchButton: true,
+
+                searchFilter: "",
+
+                pagination: {
+                    page: 1,
+                    length: 15
+                }
             }
         },
 
         computed: {
             checkContacts() {
                 return this.$store.state.contacts;
+            }
+        },
+
+        watch: {
+            selectedContacts(contacts) {
+                this.disabledDeleteButton = contacts.length > 0 ? false : true;
+            },
+
+            searchFilter(text) {
+                this.disabledSearchButton = text.length > 0 ? false : true;
             }
         },
 
@@ -197,6 +253,10 @@
 
 <style scoped>
     .text-field-color >>> .v-text-field__slot input {
+        color: rebeccapurple;
+    }
+
+    .pagination-text-color >>> .v-pagination__item {
         color: rebeccapurple;
     }
 </style>

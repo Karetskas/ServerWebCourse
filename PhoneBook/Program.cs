@@ -2,6 +2,9 @@ using System;
 using System.Text.Json.Serialization;
 using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
 using Academits.Karetskas.PhoneBook.DataAccess;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,14 +25,18 @@ namespace Academits.Karetskas.PhoneBook
             {
                 options.UseSqlServer(dbConnectionString)
                     .UseLazyLoadingProxies();
-            }, ServiceLifetime.Transient, ServiceLifetime.Transient);
+            });
             
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<DbInitializer>();
             builder.Services.AddTransient<GetContactsHandler>();
             builder.Services.AddTransient<AddContactHandler>();
-
+            builder.Services.AddTransient<IContactRepository, ContactRepository>();
+            builder.Services.AddTransient<IPhoneNumberRepository, PhoneNumberRepository>();
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWorkPhoneBook>();
+            builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
+            
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {

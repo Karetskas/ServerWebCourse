@@ -1,27 +1,48 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
 
 namespace Academits.Karetskas.PhoneBook
 {
     public class DbInitializer
     {
         private readonly PhoneBookDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DbInitializer(PhoneBookDbContext context)
+        public DbInitializer(PhoneBookDbContext context, IUnitOfWork unitOfWork)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context), $"The argument \"{nameof(context)}\" is null.");
+            CheckArgument(context);
+            CheckArgument(unitOfWork);
+
+            _context = context;
+            _unitOfWork = unitOfWork;
+        }
+
+        private void CheckArgument(object? obj)
+        {
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj), $"The argument \"{nameof(obj)}\" is null.");
+            }
         }
 
         public void Initialize()
         {
             _context.Database.Migrate();
 
-            if (!_context.Contacts.Any())
+            if (_unitOfWork.GetRepository<IContactRepository>()!.ContainAnyElements())
             {
+                return;
+            }
+
+            try
+            {
+                _unitOfWork.BeginTransaction();
+
                 var ivanovII = new Contact
                 {
                     FirstName = "Ivan",
@@ -41,7 +62,7 @@ namespace Academits.Karetskas.PhoneBook
                         }
                     }
                 };
-            
+
                 var PetrovPP = new Contact
                 {
                     FirstName = "Petr",
@@ -55,7 +76,7 @@ namespace Academits.Karetskas.PhoneBook
                         }
                     }
                 };
-            
+
                 var SidorovSS = new Contact
                 {
                     FirstName = "Sidor",
@@ -124,9 +145,15 @@ namespace Academits.Karetskas.PhoneBook
                     }
                 };
 
-                _context.Contacts.AddRange(ivanovII, PetrovPP, SidorovSS, OgurcovOO, PetrosyanPP, KirkorovKK);
+                _unitOfWork.GetRepository<IContactRepository>()!.AddRange(ivanovII, PetrovPP, SidorovSS, OgurcovOO, PetrosyanPP, KirkorovKK);
 
-                _context.SaveChanges();
+                _unitOfWork.Save();
+
+                _unitOfWork.CommitTransaction();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.RollbackTransaction();
             }
         }
     }

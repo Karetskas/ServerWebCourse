@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using Academits.Karetskas.PhoneBook.Dto;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
-using Academits.Karetskas.PhoneBook.Dto;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {
@@ -147,9 +146,8 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
                 return (false, "Allowed characters: (, ), +, -, 0-9, dots and spaces!");
             }
 
-            var hasNumber = _context.Contacts
+            var hasNumber = _context.PhoneNumbers
                 .AsNoTracking()
-                .SelectMany(contact => contact.PhoneNumbers)
                 .Any(phoneNumber => phoneNumber.Phone == text);
 
             if (hasNumber)
