@@ -2,42 +2,43 @@
 using System.Linq;
 using System.Collections.Generic;
 using Academits.Karetskas.PhoneBook.DataAccess;
+using Academits.Karetskas.PhoneBook.DataAccess.Model;
 using Academits.Karetskas.PhoneBook.Dto;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {
     public class GetContactsHandler
     {
-        private readonly PhoneBookDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetContactsHandler(PhoneBookDbContext context)
+        public GetContactsHandler(IUnitOfWork unitOfWork)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context), $"The argument \"{nameof(context)}\" is null.");
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), $"The argument \"{nameof(unitOfWork)}\" is null.");
         }
 
-        public List<ContactDto> Handler()
+        public List<ContactDto> Handler(string? searchFilterText, int pageNumber, int rowsCount)
         {
-            return _context.Contacts
-                .AsNoTracking()
-                .Select(contact => new ContactDto
-                {
-                    Id = contact.Id,
-                    FirstName = contact.FirstName,
-                    LastName = contact.LastName,
-                    PhoneNumbers = contact.PhoneNumbers
-                        .Select(phoneNumber => new PhoneNumberDto
-                        {
-                            Id = phoneNumber.Id,
-                            Phone = phoneNumber.Phone,
-                            PhoneType = phoneNumber.PhoneType
-                        })
-                        .OrderBy(phoneNumberDto => phoneNumberDto.Phone)
-                        .ToList()
-                })
-                .OrderBy(contactDto => contactDto.LastName)
-                .ThenBy(contactDto => contactDto.FirstName)
-                .ToList();
+            var filterText = searchFilterText.IsNullOrEmpty() ? "" : searchFilterText;
+
+            var contactsCount = _unitOfWork.GetRepository<IContactRepository>()!.GetContactsCount(filterText);
+
+            if (rowsCount < 1)
+            {
+                return new List<ContactDto>();
+            }
+
+            var pagesCount = (int)Math.Ceiling((decimal)contactsCount / rowsCount);
+
+            if (pageNumber < 1 || pageNumber > pagesCount)
+            {
+                return new List<ContactDto>();
+            }
+            
+            return _unitOfWork.GetRepository<IContactRepository>()!.GetContacts(filterText, pageNumber, rowsCount);
         }
     }
 }

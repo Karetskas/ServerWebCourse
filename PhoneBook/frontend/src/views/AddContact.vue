@@ -450,7 +450,7 @@
                 }
 
                 this.$store.dispatch("addContact", contact)
-                    .then((errorMessages) => {
+                    .then(errorMessages => {
                         let isError = false;
                         for (let i = 0; i < errorMessages.length; i++) {
                             if (errorMessages[i].message.length > 0) {
@@ -468,7 +468,7 @@
                             this.mobilePhoneTextField.phone = "";
                         }
                     })
-                    .catch((reject) => {
+                    .catch(reject => {
                         this.$store.commit("enableErrorMessage", reject);
                     });
             },

@@ -11,12 +11,7 @@
                 <v-data-table v-model="selectedContacts"
                               :headers="headers"
                               :items="checkContacts"
-                              :items-per-page="5"
-                              :footer-props="{
-                                showFirstLastPage: false,
-                                itemsPerPageOptions: [5, 10, 50],
-                                showCurrentPage: true
-                              }"
+                              :items-per-page="rowsCount"
                               :loading="$store.state.isLoading"
                               loading-text="Loading... Please wait!"
                               item-key="serialNumber"
@@ -106,18 +101,25 @@
                     <template v-slot:top>
                         <v-container>
                             <v-row>
-                                <v-col cols="3" class="d-flex align-center">
+                                <v-col cols="12" sm="2" class="d-flex flex-column pb-0 pb-sm-3">
                                     <v-btn :disabled="disabledDeleteButton"
                                            elevation="5"
                                            block
-                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black">
+                                           small
+                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black mb-1">
                                         <v-icon class="mdi mdi-delete"></v-icon>
+                                    </v-btn>
+
+                                    <v-btn elevation="5"
+                                           block
+                                           small
+                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black">
+                                        <v-icon class="mdi mdi-download"></v-icon>
                                     </v-btn>
                                 </v-col>
 
-                                <v-col cols="9" class="d-flex align-center">
-                                    <v-text-field v-model.trim="searchFilter"
-                                                  clearable
+                                <v-col cols="12" sm="10" class="d-flex align-center my-3">
+                                    <v-text-field v-model.trim="enteredFilterText"
                                                   outlined
                                                   dense
                                                   label="Search filter"
@@ -128,9 +130,19 @@
                                                   class="text-field-color font-weight-bold rounded-r-0 rounded-xl">
                                     </v-text-field>
 
+                                    <v-btn @click="clearSearchFilter()"
+                                           elevation="0"
+                                           tile
+                                           x-small
+                                           height="100%"
+                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black px-0">
+                                        <v-icon class="mdi mdi-window-close"></v-icon>
+                                    </v-btn>
+
                                     <v-btn :disabled="disabledSearchButton"
-                                           elevation="0" 
-                                           small 
+                                           @click="filterContacts"
+                                           elevation="0"
+                                           x-small
                                            height="100%"
                                            class="green lighten-3 deep-purple--text text--darken-1 font-weight-black rounded-l-0 rounded-xl px-0">
                                         <v-icon class="mdi mdi-account-search"></v-icon>
@@ -142,13 +154,33 @@
 
                     <!--created v-if-->
                     <template v-slot:footer>
-                        <v-pagination v-model="pagination.page"
-                                      :length="pagination.length"
-                                      total-visible="7"
-                                      color="indigo lighten-4"
-                                      navigation-text-color="deep-purple darken-1"
-                                      class="pagination-text-color">
-                        </v-pagination>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" sm="9" class="d-flex align-center justify-center">
+                                    <v-pagination v-model="pageNumber"
+                                                  :length="$store.state.pagesCount"
+                                                  :total-visible="7"
+                                                  color="indigo lighten-4"
+                                                  navigation-text-color="deep-purple darken-1"
+                                                  class="pagination-text-color">
+                                    </v-pagination>
+                                </v-col>
+
+                                <v-spacer></v-spacer>
+
+                                <v-col cols="12" sm="2" class="d-flex align-center">
+                                    <v-autocomplete v-model="rowsCount"
+                                                    :items="itemsPerPageCount"
+                                                    @change="getContacts(undefined, 1, undefined)"
+                                                    color="deep-purple darken-1"
+                                                    background-color="indigo lighten-5"
+                                                    item-color="deep-purple darken-1"
+                                                    outlined
+                                                    dense
+                                                    hide-details></v-autocomplete>
+                                </v-col>
+                            </v-row>
+                        </v-container>
                     </template>
                 </v-data-table>
             </v-col>
@@ -160,7 +192,9 @@
     export default {
         data() {
             return {
+                itemsPerPageCount: [3, 5, 10, 50],
                 selectedContacts: [],
+
                 headers: [
                     {
                         text: "#",
@@ -192,18 +226,35 @@
                 disabledDeleteButton: true,
                 disabledSearchButton: true,
 
-                searchFilter: "",
-
-                pagination: {
-                    page: 1,
-                    length: 15
-                }
+                enteredFilterText: "",
             }
         },
 
         computed: {
             checkContacts() {
                 return this.$store.state.contacts;
+            },
+
+            rowsCount: {
+                get() {
+                    return this.$store.state.page.rowsCount;
+                },
+
+                set(value) {
+                    this.$store.commit('setRowsCount', value);
+                }
+            },
+
+            pageNumber: {
+                get() {
+                    return this.$store.state.page.pageNumber;
+                },
+
+                set(value) {
+                    this.$store.commit("setPageNumber", value);
+
+                    this.getContacts(undefined, value, undefined);
+                }
             }
         },
 
@@ -212,7 +263,7 @@
                 this.disabledDeleteButton = contacts.length > 0 ? false : true;
             },
 
-            searchFilter(text) {
+            enteredFilterText(text) {
                 this.disabledSearchButton = text.length > 0 ? false : true;
             }
         },
@@ -244,8 +295,26 @@
                 }
             },
 
-            getContacts() {
-                this.$store.dispatch("loadContacts");
+            getContacts(searchFilterText = this.$store.state.searchFilterText, 
+                pageNumber = this.$store.state.page.pageNumber, 
+                rowsCount = this.$store.state.page.rowsCount) {
+                let page = {
+                    searchFilterText: searchFilterText,
+                    pageNumber: pageNumber,
+                    rowsCount: rowsCount
+                }
+
+                this.$store.dispatch("loadContacts", page);
+            },
+
+            clearSearchFilter() {
+                this.enteredFilterText = "";
+
+                this.getContacts(this.enteredFilterText, 1, undefined);
+            },
+
+            filterContacts() {
+                this.getContacts(this.enteredFilterText, 1, undefined);
             }
         }
     }
@@ -257,6 +326,14 @@
     }
 
     .pagination-text-color >>> .v-pagination__item {
+        color: rebeccapurple;
+    }
+
+    .v-list >>> .v-list-item__title {
+        color: rebeccapurple;
+    }
+
+    .v-autocomplete >>> input {
         color: rebeccapurple;
     }
 </style>

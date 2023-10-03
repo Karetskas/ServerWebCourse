@@ -20,10 +20,15 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
                 : dbContext;
         }
 
-        public List<ContactDto> GetContacts()
+        public List<ContactDto> GetContacts(string? searchFilterText, int pageNumber, int rowsCount)
         {
             return _dbContext.Set<Contact>()
                 .AsNoTracking()
+                .Where(contact => EF.Functions.Like(contact.FirstName, $"%{searchFilterText}%")
+                                  || EF.Functions.Like(contact.LastName, $"%{searchFilterText}%")
+                                  || contact.PhoneNumbers.Any(phoneNumber => EF.Functions.Like(phoneNumber.Phone, $"%{searchFilterText}%")))
+                .Skip((pageNumber - 1) * rowsCount)
+                .Take(rowsCount)
                 .Select(contact => new ContactDto
                 {
                     Id = contact.Id,
@@ -42,6 +47,21 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
                 .OrderBy(contactDto => contactDto.LastName)
                 .ThenBy(contactDto => contactDto.FirstName)
                 .ToList();
+        }
+
+        public int GetContactsCount(string? searchFilterText)
+        {
+            return _dbContext
+                .Set<Contact>()
+                .AsNoTracking()
+                .Count(contact => EF.Functions.Like(contact.FirstName, $"%{searchFilterText}%")
+                                  || EF.Functions.Like(contact.LastName, $"%{searchFilterText}%")
+                                  || contact.PhoneNumbers.Any(phoneNumber =>
+                                      EF.Functions.Like(phoneNumber.Phone, $"%{searchFilterText}%")));
+
+            //return _dbContext.Set<Contact>()
+            //    .AsNoTracking()
+            //    .Count();
         }
     }
 }

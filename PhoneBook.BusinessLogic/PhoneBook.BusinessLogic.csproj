@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PhoneBook.Dto\PhoneBook.Dto.csproj" />
+    <ProjectReference Include="..\PhoneBook.UnitOfWork\PhoneBook.UnitOfWork.csproj" />
   </ItemGroup>
 
 </Project>
