@@ -27,6 +27,9 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
                 .Where(contact => EF.Functions.Like(contact.FirstName, $"%{searchFilterText}%")
                                   || EF.Functions.Like(contact.LastName, $"%{searchFilterText}%")
                                   || contact.PhoneNumbers.Any(phoneNumber => EF.Functions.Like(phoneNumber.Phone, $"%{searchFilterText}%")))
+                .OrderBy(contact => contact.LastName)
+                .ThenBy(contact => contact.FirstName)
+                .ThenBy(contact => contact.PhoneNumbers.OrderBy(phoneNumber => phoneNumber.Phone).FirstOrDefault()!.Phone)
                 .Skip((pageNumber - 1) * rowsCount)
                 .Take(rowsCount)
                 .Select(contact => new ContactDto
@@ -41,11 +44,8 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
                             Phone = phoneNumber.Phone,
                             PhoneType = phoneNumber.PhoneType
                         })
-                        .OrderBy(phoneNumberDto => phoneNumberDto.Phone)
                         .ToList()
                 })
-                .OrderBy(contactDto => contactDto.LastName)
-                .ThenBy(contactDto => contactDto.FirstName)
                 .ToList();
         }
 
@@ -58,10 +58,13 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
                                   || EF.Functions.Like(contact.LastName, $"%{searchFilterText}%")
                                   || contact.PhoneNumbers.Any(phoneNumber =>
                                       EF.Functions.Like(phoneNumber.Phone, $"%{searchFilterText}%")));
+        }
 
-            //return _dbContext.Set<Contact>()
-            //    .AsNoTracking()
-            //    .Count();
+        public Contact[] FindAllContactsById(List<int> contactsId)
+        {
+            return _dbContext.Set<Contact>()
+                .Where(contact => contactsId.Any(id => id == contact.Id))
+                .ToArray();
         }
     }
 }

@@ -32,6 +32,7 @@ namespace Academits.Karetskas.PhoneBook
             builder.Services.AddTransient<DbInitializer>();
             builder.Services.AddTransient<GetContactsHandler>();
             builder.Services.AddTransient<AddContactHandler>();
+            builder.Services.AddTransient<DeleteContactsHandler>();
             builder.Services.AddTransient<GetContactsCountHandler>();
             builder.Services.AddTransient<IContactRepository, ContactRepository>();
             builder.Services.AddTransient<IPhoneNumberRepository, PhoneNumberRepository>();

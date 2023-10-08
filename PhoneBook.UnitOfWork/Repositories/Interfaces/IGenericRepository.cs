@@ -12,6 +12,8 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces
 
         void Delete(T entity);
 
+        void DeleteRange(params T[] entities);
+
         bool ContainAnyElements();
 
         T[] GetAll();

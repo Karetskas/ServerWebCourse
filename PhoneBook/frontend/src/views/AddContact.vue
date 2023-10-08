@@ -464,8 +464,11 @@
                             this.firstNameTextField.text = "";
                             this.lastNameTextField.text = "";
                             this.homePhoneTextField.phone = "";
+                            this.homePhoneTextField.disabled = true;
                             this.workPhoneTextField.phone = "";
+                            this.workPhoneTextField.disabled = false;
                             this.mobilePhoneTextField.phone = "";
+                            this.mobilePhoneTextField.disabled = false;
                         }
                     })
                     .catch(reject => {

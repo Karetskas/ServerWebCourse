@@ -1,6 +1,6 @@
 ﻿<template>
-    <v-container fill-height 
-                 fluid 
+    <v-container fill-height
+                 fluid
                  class="pa-0">
         <v-row class="d-flex flex-column">
             <v-col>
@@ -15,8 +15,8 @@
                               :loading="$store.state.isLoading"
                               loading-text="Loading... Please wait!"
                               item-key="serialNumber"
-                              class="elevation-1 deep-purple--text text--darken-3 indigo lighten-5"
                               show-select
+                              class="elevation-1 deep-purple--text text--darken-3 indigo lighten-5"
                               hide-default-footer>
                     <template v-slot:header.serialNumber="{ header }">
                         <span class="deep-purple--text text--darken-3 text-subtitle-1 font-weight-bold">{{header.text}}</span>
@@ -38,11 +38,26 @@
                         <span class="deep-purple--text text--darken-3 text-subtitle-1 font-weight-bold">{{header.text}}</span>
                     </template>
 
-                    <template v-slot:item.action="{  }">
-                        <v-btn class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black"
+                    <template v-slot:header.data-table-select="{ on, props }">
+                        <v-simple-checkbox v-bind="props"
+                                           v-on="on"
+                                           color="deep-purple lighten-2">
+                        </v-simple-checkbox>
+                    </template>
+
+                    <template v-slot:item.data-table-select="{ isSelected, select }">
+                        <v-simple-checkbox :value="isSelected"
+                                           @input="select($event)"
+                                           color="deep-purple accent-3">
+                        </v-simple-checkbox>
+                    </template>
+
+                    <template v-slot:item.action="{ item }">
+                        <v-btn @click="showDialogToDeleteContacts([item])"
+                               class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black"
                                elevation="3"
                                block>
-                            <v-icon class="mdi mdi-delete-forever"></v-icon>
+                            <v-icon class="mdi mdi-delete"></v-icon>
                         </v-btn>
                     </template>
 
@@ -60,34 +75,11 @@
                         </div>
                     </template>
 
-                    <template v-slot:header.data-table-select="{ on, props }">
-                        <v-simple-checkbox v-bind="props"
-                                           v-on="on"
-                                           color="deep-purple lighten-2">
-                        </v-simple-checkbox>
-                    </template>
-
-
-                    <template v-slot:item.data-table-select="{ isSelected, select }">
-                        <v-simple-checkbox :value="isSelected"
-                                           @input="select($event)"
-                                           color="green lighten-2">
-                        </v-simple-checkbox>
-                    </template>
-
                     <template v-slot:progress>
                         <v-progress-linear :height="10"
                                            color="deep-purple dark-5"
                                            indeterminate>
                         </v-progress-linear>
-                    </template>
-
-                    <template v-slot:no-results>
-                        <v-icon class="mr-1 mdi mdi-emoticon-sad-outline"
-                                color="red lighten-2"></v-icon>
-                        <span class="red--text text--lighten-2 font-weight-black">NOT FOUND!</span>
-                        <v-icon class="ml-1 mdi mdi-emoticon-sad-outline"
-                                color="red lighten-2"></v-icon>
                     </template>
 
                     <template v-slot:no-data>
@@ -102,23 +94,31 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" sm="2" class="d-flex flex-column pb-0 pb-sm-3">
-                                    <v-btn :disabled="disabledDeleteButton"
+                                    <v-btn :disabled="disabledDownloadButton"
                                            elevation="5"
-                                           block
                                            small
-                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black mb-1">
-                                        <v-icon class="mdi mdi-delete"></v-icon>
-                                    </v-btn>
-
-                                    <v-btn elevation="5"
-                                           block
-                                           small
-                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black">
+                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black mb-3 mx-10 mx-sm-0">
                                         <v-icon class="mdi mdi-download"></v-icon>
                                     </v-btn>
+
+                                    <v-badge :content="contactsCountToDelete"
+                                             :value="contactsCountToDelete"
+                                             color="deep-purple darken-1"
+                                             overlap
+                                             bottom
+                                             class="mx-10 mx-sm-0">
+                                        <v-btn :disabled="disabledDeleteButton"
+                                               @click="showDialogToDeleteContacts(selectedContacts)"
+                                               elevation="5"
+                                               block
+                                               small
+                                               class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black">
+                                            <v-icon class="mdi mdi-delete"></v-icon>
+                                        </v-btn>
+                                    </v-badge>
                                 </v-col>
 
-                                <v-col cols="12" sm="10" class="d-flex align-center my-3">
+                                <v-col cols="12" sm="10" class="d-flex align-center my-4">
                                     <v-text-field v-model.trim="enteredFilterText"
                                                   outlined
                                                   dense
@@ -150,9 +150,51 @@
                                 </v-col>
                             </v-row>
                         </v-container>
+
+                        <v-dialog v-model="modalDialogForDeletingContacts"
+                                  scrollable
+                                  persistent
+                                  max-width="350px">
+                            <v-card color="indigo lighten-5">
+                                <v-card-title class="text-center deep-purple--text text--darken-1 font-weight-bold pa-1">The following contacts will be deleted:</v-card-title>
+
+                                <v-divider></v-divider>
+
+                                <v-chip-group class="px-2"
+                                              column>
+                                    <v-chip v-for="contact in contactsToDelete"
+                                            :key="contact.serialNumber"
+                                            :ripple="false"
+                                            class="font-weight-bold"
+                                            color="deep-purple accent-3"
+                                            text-color="deep-purple accent-3"
+                                            outlined
+                                            small>
+                                        {{contact.lastName + " " + contact.firstName}}
+                                    </v-chip>
+                                </v-chip-group>
+
+                                <v-divider></v-divider>
+
+                                <v-card-actions class="d-flex justify-space-around">
+                                    <v-btn @click="undeleteContacts"
+                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black"
+                                           small
+                                           width="75">
+                                        <v-icon class="mdi mdi-window-close"></v-icon>
+                                    </v-btn>
+
+                                    <v-btn @click="deleteContacts"
+                                           class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black"
+                                           small
+                                           width="75">
+                                        <v-icon class="mdi mdi-delete"></v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </template>
 
-                    <!--created v-if-->
                     <template v-slot:footer>
                         <v-container>
                             <v-row>
@@ -168,7 +210,7 @@
 
                                 <v-spacer></v-spacer>
 
-                                <v-col cols="12" sm="2" class="d-flex align-center">
+                                <v-col cols="6" sm="2" class="d-flex align-center">
                                     <v-autocomplete v-model="rowsCount"
                                                     :items="itemsPerPageCount"
                                                     @change="getContacts(undefined, 1, undefined)"
@@ -194,12 +236,14 @@
             return {
                 itemsPerPageCount: [3, 5, 10, 50],
                 selectedContacts: [],
+                contactsToDelete: [],
 
                 headers: [
                     {
                         text: "#",
                         value: "serialNumber",
-                        align: "center"
+                        align: "center",
+                        sortable: false
                     },
                     {
                         text: "Last name",
@@ -219,20 +263,28 @@
                     {
                         text: "Action",
                         value: "action",
-                        align: "center"
+                        align: "center",
+                        sortable: false
                     }
                 ],
-                
+
+                contactsCountToDelete: 0,
                 disabledDeleteButton: true,
                 disabledSearchButton: true,
 
                 enteredFilterText: "",
+
+                modalDialogForDeletingContacts: false
             }
         },
 
         computed: {
             checkContacts() {
                 return this.$store.state.contacts;
+            },
+
+            disabledDownloadButton() {
+                return this.checkContacts.length === 0;
             },
 
             rowsCount: {
@@ -260,7 +312,9 @@
 
         watch: {
             selectedContacts(contacts) {
-                this.disabledDeleteButton = contacts.length > 0 ? false : true;
+                this.disabledDeleteButton = contacts.length === 0;
+
+                this.contactsCountToDelete = contacts.length;
             },
 
             enteredFilterText(text) {
@@ -295,8 +349,8 @@
                 }
             },
 
-            getContacts(searchFilterText = this.$store.state.searchFilterText, 
-                pageNumber = this.$store.state.page.pageNumber, 
+            getContacts(searchFilterText = this.$store.state.searchFilterText,
+                pageNumber = this.$store.state.page.pageNumber,
                 rowsCount = this.$store.state.page.rowsCount) {
                 let page = {
                     searchFilterText: searchFilterText,
@@ -308,6 +362,10 @@
             },
 
             clearSearchFilter() {
+                if (this.enteredFilterText === "") {
+                    return;
+                }
+
                 this.enteredFilterText = "";
 
                 this.getContacts(this.enteredFilterText, 1, undefined);
@@ -315,6 +373,27 @@
 
             filterContacts() {
                 this.getContacts(this.enteredFilterText, 1, undefined);
+            },
+
+            showDialogToDeleteContacts(contacts) {
+                this.contactsToDelete = contacts;
+
+                this.modalDialogForDeletingContacts = true;
+            },
+
+            undeleteContacts() {
+                this.modalDialogForDeletingContacts = false;
+
+                this.contactsToDelete = [];
+            },
+
+            deleteContacts() {
+                this.modalDialogForDeletingContacts = false;
+
+                this.$store.dispatch("deleteContacts", this.contactsToDelete.map(contact => contact.id))
+                    .then(() => {
+                        this.selectedContacts = [];
+                    });
             }
         }
     }
@@ -335,5 +414,9 @@
 
     .v-autocomplete >>> input {
         color: rebeccapurple;
+    }
+
+    .v-dialog__content >>> .v-card__title {
+        word-break: break-word;
     }
 </style>

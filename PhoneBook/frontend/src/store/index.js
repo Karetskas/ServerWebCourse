@@ -22,7 +22,8 @@ export default new Vuex.Store({
             rowsCount: 3
         },
 
-        pagesCount: 0
+        pagesCount: 0,
+        contactsCount: 0
     },
 
     getters: {},
@@ -36,12 +37,20 @@ export default new Vuex.Store({
             state.page.rowsCount = value;
         },
 
+        setContactsCount(state, value) {
+            state.contactsCount = value;
+        },
+
         setSearchFilterText(state, text) {
             state.searchFilterText = text;
         },
 
         setIsLoading(state, value) {
             state.isLoading = value;
+        },
+
+        setPagesCount(state, value) {
+            state.pagesCount = Math.ceil(value / state.page.rowsCount);
         },
 
         setContacts(state, contacts) {
@@ -51,12 +60,13 @@ export default new Vuex.Store({
             for (let i = 0; i < contacts.length; i++) {
                 contactsList.push({
                     serialNumber: counter++,
+                    id: contacts[i].id,
                     lastName: contacts[i].lastName,
                     firstName: contacts[i].firstName,
                     phoneNumbers: contacts[i].phoneNumbers
                 });
             }
-
+            
             state.contacts = contactsList;
         },
 
@@ -88,7 +98,7 @@ export default new Vuex.Store({
                     commit("setPageNumber", page.pageNumber);
                     commit("setRowsCount", page.rowsCount);
                     
-                    dispatch("getPagesCount");
+                    dispatch("getContactsCount");
 
                     commit("setContacts", response.data);
                 })
@@ -102,14 +112,30 @@ export default new Vuex.Store({
                 .catch(error => commit("enableErrorMessage", error));
         },
 
-        getPagesCount({ state, commit }) {
+        getContactsCount({ state, commit }) {
             return axios.get("/api/PhoneBook/GetContactsCount",
                     {
                          params: {
                              searchFilterText: state.searchFilterText
                          }
                     })
-                .then(resolve => state.pagesCount = Math.ceil(resolve.data / state.page.rowsCount))
+                .then(resolve => {
+                    commit("setContactsCount", resolve.data);
+                    commit("setPagesCount", resolve.data);
+                })
+                .catch(error => commit("enableErrorMessage", error));
+        },
+
+        deleteContacts({ state, dispatch, commit }, contactsId) {
+            return axios.post("/api/PhoneBook/deleteContacts", contactsId)
+                .then(() => {
+                    dispatch("loadContacts",
+                        {
+                            searchFilterText: state.searchFilterText,
+                            pageNumber: 1,
+                            rowsCount: state.page.rowsCount
+                        });
+                })
                 .catch(error => commit("enableErrorMessage", error));
         }
     },

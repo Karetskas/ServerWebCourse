@@ -9,5 +9,7 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces
         List<ContactDto> GetContacts(string? searchFilterText, int pageNumber, int rowsCount);
 
         int GetContactsCount(string? searchFilterText);
+
+        Contact[] FindAllContactsById(List<int> contactsId);
     }
 }

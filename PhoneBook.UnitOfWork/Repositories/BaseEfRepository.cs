@@ -39,6 +39,11 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
             DbSet.Remove(entity);
         }
 
+        public void DeleteRange(params T[] entities)
+        {
+            DbSet.RemoveRange(entities);
+        }
+
         public virtual bool ContainAnyElements()
         {
             return DbSet.Any();

@@ -13,8 +13,10 @@ namespace Academits.Karetskas.PhoneBook.Controllers
         private readonly GetContactsHandler _getContactsHandler;
         private readonly AddContactHandler _addContactHandler;
         private readonly GetContactsCountHandler _getContactsCountHandler;
+        private readonly DeleteContactsHandler _deleteContactsHandler;
 
-        public PhoneBookController(GetContactsHandler getContactsHandler, AddContactHandler addContactHandler, GetContactsCountHandler getContactsCountHandler)
+        public PhoneBookController(GetContactsHandler getContactsHandler, AddContactHandler addContactHandler, GetContactsCountHandler getContactsCountHandler,
+            DeleteContactsHandler deleteContactsHandler)
         {
             _getContactsHandler = getContactsHandler ?? throw new ArgumentNullException(nameof(getContactsHandler),
                 $"The argument \"{nameof(getContactsHandler)}\" is null.");
@@ -24,6 +26,9 @@ namespace Academits.Karetskas.PhoneBook.Controllers
 
             _getContactsCountHandler = getContactsCountHandler ?? throw new ArgumentNullException(nameof(getContactsCountHandler),
                 $"The argument \"{nameof(getContactsCountHandler)}\" is null.");
+            
+            _deleteContactsHandler = deleteContactsHandler ?? throw new ArgumentNullException(nameof(deleteContactsHandler),
+                $"The argument \"{nameof(deleteContactsHandler)}\" is null.");
         }
 
         [HttpGet]
@@ -42,6 +47,12 @@ namespace Academits.Karetskas.PhoneBook.Controllers
         public ErrorMessageDto[] AddContact(ContactDto contact)
         {
             return _addContactHandler.Handler(contact);
+        }
+
+        [HttpPost]
+        public void DeleteContacts(List<int> contactsId)
+        {
+            _deleteContactsHandler.Handler(contactsId);
         }
     }
 }
