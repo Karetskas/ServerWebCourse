@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
-using Academits.Karetskas.PhoneBook.Dto;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Academits.Karetskas.PhoneBook.Dto;
+using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
 
 namespace Academits.Karetskas.PhoneBook.Controllers
 {
@@ -14,9 +14,10 @@ namespace Academits.Karetskas.PhoneBook.Controllers
         private readonly AddContactHandler _addContactHandler;
         private readonly GetContactsCountHandler _getContactsCountHandler;
         private readonly DeleteContactsHandler _deleteContactsHandler;
+        private readonly DownloadExcelFileHandler _downloadExcelFileHandler;
 
         public PhoneBookController(GetContactsHandler getContactsHandler, AddContactHandler addContactHandler, GetContactsCountHandler getContactsCountHandler,
-            DeleteContactsHandler deleteContactsHandler)
+            DeleteContactsHandler deleteContactsHandler, DownloadExcelFileHandler downloadExcelFileHandler)
         {
             _getContactsHandler = getContactsHandler ?? throw new ArgumentNullException(nameof(getContactsHandler),
                 $"The argument \"{nameof(getContactsHandler)}\" is null.");
@@ -26,9 +27,12 @@ namespace Academits.Karetskas.PhoneBook.Controllers
 
             _getContactsCountHandler = getContactsCountHandler ?? throw new ArgumentNullException(nameof(getContactsCountHandler),
                 $"The argument \"{nameof(getContactsCountHandler)}\" is null.");
-            
+
             _deleteContactsHandler = deleteContactsHandler ?? throw new ArgumentNullException(nameof(deleteContactsHandler),
                 $"The argument \"{nameof(deleteContactsHandler)}\" is null.");
+
+            _downloadExcelFileHandler = downloadExcelFileHandler ?? throw new ArgumentNullException(nameof(downloadExcelFileHandler),
+                $"The argument \"{nameof(downloadExcelFileHandler)}\" is null.");
         }
 
         [HttpGet]
@@ -41,6 +45,14 @@ namespace Academits.Karetskas.PhoneBook.Controllers
         public int GetContactsCount([FromQuery] string? searchFilterText)
         {
             return _getContactsCountHandler.Handler(searchFilterText);
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadExcelFile([FromQuery] string? searchFilterText)
+        {
+            var content = _downloadExcelFileHandler.Handler(searchFilterText);
+
+            return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PhoneBool.xlsx");
         }
 
         [HttpPost]

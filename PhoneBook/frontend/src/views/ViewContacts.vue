@@ -95,6 +95,7 @@
                             <v-row>
                                 <v-col cols="12" sm="2" class="d-flex flex-column pb-0 pb-sm-3">
                                     <v-btn :disabled="disabledDownloadButton"
+                                           @click="downloadExcelFile"
                                            elevation="5"
                                            small
                                            class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black mb-3 mx-10 mx-sm-0">
@@ -392,7 +393,51 @@
 
                 this.$store.dispatch("deleteContacts", this.contactsToDelete.map(contact => contact.id))
                     .then(() => {
+                        if (this.contactsToDelete.length > 1) {
+                            this.selectedContacts = [];
+                            this.contactsToDelete = [];
+
+                            return;
+                        }
+
+                        let contacts = JSON.parse(JSON.stringify(this.selectedContacts));
                         this.selectedContacts = [];
+
+                        this.selectedContacts = contacts
+                            .filter(selectedContact => !this.contactsToDelete.find(contactToDelete => contactToDelete.id === selectedContact.id))
+                            .map(selectedContact => {
+                                if (selectedContact.serialNumber > this.contactsToDelete[0].serialNumber) {
+                                    selectedContact.serialNumber = selectedContact.serialNumber - 1;
+                                }
+
+                                return selectedContact;
+                            });
+
+                        this.contactsToDelete = [];
+                    });
+            },
+
+            downloadExcelFile() {
+                this.$store.dispatch("downloadExcelFile")
+                    .then(response => {
+                        if (response === null) {
+                            this.$store.commit("enableErrorMessage", "The file was not created!");
+
+                            return;
+                        }
+
+                        let blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+                        let url = window.URL.createObjectURL(blob);
+
+                        let anchor = document.createElement("a");
+                        anchor.style.display = "none";
+                        anchor.href = url;
+                        anchor.setAttribute("download", "PhoneBook.xlsx")
+                        document.body.appendChild(anchor);
+                        anchor.click();
+                        anchor.remove();
+
+                        URL.revokeObjectURL(url);
                     });
             }
         }

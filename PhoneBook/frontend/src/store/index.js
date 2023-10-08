@@ -137,6 +137,19 @@ export default new Vuex.Store({
                         });
                 })
                 .catch(error => commit("enableErrorMessage", error));
+        },
+
+        downloadExcelFile({ state, commit }) {
+            return axios.get("/api/PhoneBook/downloadExcelFile",
+                    {
+                        responseType: "blob",
+
+                        params: {
+                            searchFilterText: state.searchFilterText
+                        }
+                    })
+                .then(resolve => resolve)
+                .catch(error => commit("enableErrorMessage", error));
         }
     },
 
