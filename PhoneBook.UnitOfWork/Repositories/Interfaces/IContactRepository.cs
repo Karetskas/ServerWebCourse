@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Academits.Karetskas.PhoneBook.DataAccess.Model;
 using Academits.Karetskas.PhoneBook.Dto;
+using Academits.Karetskas.PhoneBook.DataAccess.Model;
 
 namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces
 {

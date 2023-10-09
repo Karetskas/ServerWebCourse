@@ -1,16 +1,16 @@
 using System;
-using System.Text.Json.Serialization;
-using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
-using Academits.Karetskas.PhoneBook.DataAccess;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
-using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Academits.Karetskas.PhoneBook.DataAccess;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook
 {
@@ -26,7 +26,7 @@ namespace Academits.Karetskas.PhoneBook
                 options.UseSqlServer(dbConnectionString)
                     .UseLazyLoadingProxies();
             });
-            
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddTransient<DbInitializer>();
@@ -38,7 +38,7 @@ namespace Academits.Karetskas.PhoneBook
             builder.Services.AddTransient<IContactRepository, ContactRepository>();
             builder.Services.AddTransient<IPhoneNumberRepository, PhoneNumberRepository>();
             builder.Services.AddTransient<IUnitOfWork, UnitOfWorkPhoneBook>();
-            
+
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
@@ -64,11 +64,11 @@ namespace Academits.Karetskas.PhoneBook
                     throw;
                 }
             }
-            
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                
+
                 app.UseHsts();
             }
 
@@ -85,10 +85,6 @@ namespace Academits.Karetskas.PhoneBook
             app.MapControllers();
 
             app.MapFallbackToFile("index.html");
-
-            /*app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");*/
 
             app.Run();
         }

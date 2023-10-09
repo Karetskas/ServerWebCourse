@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces
+﻿namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces
 {
     public interface IGenericRepository<T> : IRepository where T : class
     {

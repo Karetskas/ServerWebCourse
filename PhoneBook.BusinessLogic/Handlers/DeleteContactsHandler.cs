@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {

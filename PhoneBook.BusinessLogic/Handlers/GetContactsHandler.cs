@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using Academits.Karetskas.PhoneBook.DataAccess;
-using Academits.Karetskas.PhoneBook.DataAccess.Model;
-using Academits.Karetskas.PhoneBook.Dto;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
-using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Academits.Karetskas.PhoneBook.Dto;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {
@@ -37,7 +33,7 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
             {
                 return new List<ContactDto>();
             }
-            
+
             return _unitOfWork.GetRepository<IContactRepository>()!.GetContacts(filterText, pageNumber, rowsCount);
         }
     }

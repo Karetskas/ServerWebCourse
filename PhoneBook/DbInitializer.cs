@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook
 {

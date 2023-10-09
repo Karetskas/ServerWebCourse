@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using Academits.Karetskas.PhoneBook.Dto;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
-using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
-using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
+using System.Drawing;
 using OfficeOpenXml.Style;
+using Microsoft.IdentityModel.Tokens;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {

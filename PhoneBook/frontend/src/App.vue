@@ -2,7 +2,7 @@
     <v-app>
         <v-card>
             <v-tabs v-model="tabs"
-                    grow 
+                    grow
                     show-arrows
                     background-color="indigo lighten-4"
                     color="deep-purple darken-4"
@@ -44,24 +44,12 @@
                     { tab: "VIEW", route: "/ViewContacts", icon: "mdi mdi-card-account-details" },
                 ]
             }
-        },
-
-        computed: {
-            
-        },
-
-        watch: {
-
-        },
-
-        methods: {
-
         }
     }
 </script>
 
 <style scoped>
-    @media(max-width: 600px){
+    @media(max-width: 600px) {
         .button-font {
             font-size: 11px;
         }

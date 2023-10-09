@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using Academits.Karetskas.PhoneBook.Dto;
-using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {
     public class AddContactHandler
     {
-        //private readonly PhoneBookDbContext _context;
-
-        //public AddContactHandler(PhoneBookDbContext context)
-        //{
-        //    _context = context ?? throw new ArgumentNullException(nameof(context), $"The argument \"{nameof(context)}\" is null.");
-        //}
-
         private readonly IUnitOfWork _unitOfWork;
 
         public AddContactHandler(IUnitOfWork unitOfWork)
@@ -59,15 +50,6 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
                 });
 
                 _unitOfWork.Save();
-
-                //_context.Contacts.Add(new Contact
-                //{
-                //    FirstName = contact.FirstName,
-                //    LastName = contact.LastName,
-                //    PhoneNumbers = contacts
-                //});
-
-                //_context.SaveChanges();
             }
 
             return errorMessages;
@@ -77,7 +59,7 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
         {
             CheckArgument(contact);
             CheckArgument(errorMessages);
-            
+
             var hasErrorMessages = true;
 
             foreach (var errorMessage in errorMessages!)
@@ -170,10 +152,6 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
             var hasNumber = _unitOfWork.GetRepository<IPhoneNumberRepository>()!
                 .HasPhoneNumberInContacts(text);
-
-            //var hasNumber = _context.PhoneNumbers
-            //    .AsNoTracking()
-            //    .Any(phoneNumber => phoneNumber.Phone == text);
 
             if (hasNumber)
             {

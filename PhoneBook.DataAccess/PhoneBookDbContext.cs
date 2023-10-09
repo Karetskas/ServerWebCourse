@@ -1,5 +1,5 @@
-﻿using Academits.Karetskas.PhoneBook.DataAccess.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Academits.Karetskas.PhoneBook.DataAccess.Model;
 
 namespace Academits.Karetskas.PhoneBook.DataAccess
 {

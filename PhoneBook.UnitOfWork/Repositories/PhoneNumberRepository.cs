@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
 using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
 {

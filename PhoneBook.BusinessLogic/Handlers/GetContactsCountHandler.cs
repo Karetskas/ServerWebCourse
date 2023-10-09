@@ -1,7 +1,7 @@
-﻿using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
-using System;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
+﻿using System;
 using Microsoft.IdentityModel.Tokens;
+using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 {

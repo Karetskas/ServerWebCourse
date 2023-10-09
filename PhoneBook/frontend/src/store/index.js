@@ -26,8 +26,6 @@ export default new Vuex.Store({
         contactsCount: 0
     },
 
-    getters: {},
-
     mutations: {
         setPageNumber(state, value) {
             state.page.pageNumber = value;
@@ -66,7 +64,7 @@ export default new Vuex.Store({
                     phoneNumbers: contacts[i].phoneNumbers
                 });
             }
-            
+
             state.contacts = contactsList;
         },
 
@@ -97,7 +95,7 @@ export default new Vuex.Store({
                     commit("setSearchFilterText", page.searchFilterText);
                     commit("setPageNumber", page.pageNumber);
                     commit("setRowsCount", page.rowsCount);
-                    
+
                     dispatch("getContactsCount");
 
                     commit("setContacts", response.data);
@@ -114,11 +112,11 @@ export default new Vuex.Store({
 
         getContactsCount({ state, commit }) {
             return axios.get("/api/PhoneBook/GetContactsCount",
-                    {
-                         params: {
-                             searchFilterText: state.searchFilterText
-                         }
-                    })
+                {
+                    params: {
+                        searchFilterText: state.searchFilterText
+                    }
+                })
                 .then(resolve => {
                     commit("setContactsCount", resolve.data);
                     commit("setPagesCount", resolve.data);
@@ -141,19 +139,15 @@ export default new Vuex.Store({
 
         downloadExcelFile({ state, commit }) {
             return axios.get("/api/PhoneBook/downloadExcelFile",
-                    {
-                        responseType: "blob",
+                {
+                    responseType: "blob",
 
-                        params: {
-                            searchFilterText: state.searchFilterText
-                        }
-                    })
+                    params: {
+                        searchFilterText: state.searchFilterText
+                    }
+                })
                 .then(resolve => resolve)
                 .catch(error => commit("enableErrorMessage", error));
         }
-    },
-
-    modules: {
-
     }
 });

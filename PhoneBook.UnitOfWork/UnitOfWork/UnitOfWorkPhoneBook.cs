@@ -3,9 +3,8 @@ using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 using Academits.Karetskas.PhoneBook.DataAccess;
-using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories;
+using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork
 {
