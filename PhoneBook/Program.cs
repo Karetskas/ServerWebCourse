@@ -4,6 +4,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Academits.Karetskas.PhoneBook.BackgroundTasks;
+using Academits.Karetskas.PhoneBook.BusinessLogic.DataConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Academits.Karetskas.PhoneBook.DataAccess;
@@ -28,7 +30,14 @@ namespace Academits.Karetskas.PhoneBook
             });
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddTransient<IExcel, Excel>();
+            builder.Services.AddHostedService<UploadContactsDaily>(provider =>
+            {
+                var path = builder.Configuration.GetValue<string>("BackgroundTasks:UploadContactsDaily");
+                var excel = provider.GetRequiredService<IExcel>();
 
+                return new UploadContactsDaily(path, excel, provider);
+            });
             builder.Services.AddTransient<DbInitializer>();
             builder.Services.AddTransient<GetContactsHandler>();
             builder.Services.AddTransient<AddContactHandler>();

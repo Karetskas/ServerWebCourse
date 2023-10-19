@@ -189,7 +189,7 @@
                                            class="indigo lighten-4 deep-purple--text text--darken-1 font-weight-black"
                                            small
                                            width="75">
-                                        <v-icon class="mdi mdi-delete"></v-icon>
+                                        <v-icon class="mdi mdi-check"></v-icon>
                                     </v-btn>
                                 </v-card-actions>
                             </v-card>
