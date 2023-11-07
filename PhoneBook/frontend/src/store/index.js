@@ -19,20 +19,32 @@ export default new Vuex.Store({
 
         page: {
             pageNumber: 1,
-            rowsCount: 3
+            pageSize: 3
         },
 
         pagesCount: 0,
-        contactsCount: 0
+        contactsCount: 0,
+
+        toast: {
+            enabled: false,
+            text: "",
+            color: null
+        }
     },
 
     mutations: {
+        setToast(state, toast) {
+            state.toast.text = toast.text;
+            state.toast.color = toast.color;
+            state.toast.enabled = toast.enabled;
+        },
+
         setPageNumber(state, value) {
             state.page.pageNumber = value;
         },
 
-        setRowsCount(state, value) {
-            state.page.rowsCount = value;
+        setPageSize(state, value) {
+            state.page.pageSize = value;
         },
 
         setContactsCount(state, value) {
@@ -48,12 +60,12 @@ export default new Vuex.Store({
         },
 
         setPagesCount(state, value) {
-            state.pagesCount = Math.ceil(value / state.page.rowsCount);
+            state.pagesCount = Math.ceil(value / state.page.pageSize);
         },
 
         setContacts(state, contacts) {
-            let contactsList = [];
-            let counter = 1 + (state.page.pageNumber - 1) * state.page.rowsCount;
+            const contactsList = [];
+            let counter = 1 + (state.page.pageNumber - 1) * state.page.pageSize;
 
             for (let i = 0; i < contacts.length; i++) {
                 contactsList.push({
@@ -88,13 +100,13 @@ export default new Vuex.Store({
                     params: {
                         searchFilterText: page.searchFilterText,
                         pageNumber: page.pageNumber,
-                        rowsCount: page.rowsCount
+                        pageSize: page.pageSize
                     }
                 })
                 .then(response => {
                     commit("setSearchFilterText", page.searchFilterText);
                     commit("setPageNumber", page.pageNumber);
-                    commit("setRowsCount", page.rowsCount);
+                    commit("setPageSize", page.pageSize);
 
                     dispatch("getContactsCount");
 
@@ -131,23 +143,14 @@ export default new Vuex.Store({
                         {
                             searchFilterText: state.searchFilterText,
                             pageNumber: 1,
-                            rowsCount: state.page.rowsCount
+                            pageSize: state.page.pageSize
                         });
                 })
                 .catch(error => commit("enableErrorMessage", error));
         },
 
-        downloadExcelFile({ state, commit }) {
-            return axios.get("/api/PhoneBook/downloadExcelFile",
-                {
-                    responseType: "blob",
-
-                    params: {
-                        searchFilterText: state.searchFilterText
-                    }
-                })
-                .then(resolve => resolve)
-                .catch(error => commit("enableErrorMessage", error));
+        showToast({ commit }, toast) {
+            commit("setToast", toast);
         }
     }
 });

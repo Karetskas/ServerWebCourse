@@ -1,4 +1,5 @@
 ﻿using System;
+using PhoneBook.Utilities;
 using System.Collections.Generic;
 using Microsoft.IdentityModel.Tokens;
 using Academits.Karetskas.PhoneBook.Dto;
@@ -13,14 +14,16 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
         public GetContactsHandler(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), $"The argument \"{nameof(unitOfWork)}\" is null.");
+            ExceptionHandling.CheckArgumentForNull(unitOfWork);
+
+            _unitOfWork = unitOfWork;
         }
 
-        public List<ContactDto> Handler(string? searchFilterText, int pageNumber, int rowsCount)
+        public List<ContactDto> Handle(string? searchFilterText, int pageNumber, int rowsCount)
         {
             var filterText = searchFilterText.IsNullOrEmpty() ? "" : searchFilterText;
 
-            var contactsCount = _unitOfWork.GetRepository<IContactRepository>()!.GetContactsCount(filterText);
+            var contactsCount = _unitOfWork.GetRepository<IContactRepository>().GetContactsCount(filterText);
 
             if (rowsCount < 1)
             {
@@ -34,7 +37,7 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
                 return new List<ContactDto>();
             }
 
-            return _unitOfWork.GetRepository<IContactRepository>()!.GetContacts(filterText, pageNumber, rowsCount);
+            return _unitOfWork.GetRepository<IContactRepository>().GetContacts(filterText, pageNumber, rowsCount);
         }
     }
 }

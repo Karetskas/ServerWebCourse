@@ -1,4 +1,5 @@
 ﻿using System;
+using PhoneBook.Utilities;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.DataAccess;
@@ -15,26 +16,18 @@ namespace Academits.Karetskas.PhoneBook
 
         public DbInitializer(PhoneBookDbContext context, IUnitOfWork unitOfWork)
         {
-            CheckArgument(context);
-            CheckArgument(unitOfWork);
+            ExceptionHandling.CheckArgumentForNull(context);
+            ExceptionHandling.CheckArgumentForNull(unitOfWork);
 
             _context = context;
             _unitOfWork = unitOfWork;
-        }
-
-        private void CheckArgument(object? obj)
-        {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj), $"The argument \"{nameof(obj)}\" is null.");
-            }
         }
 
         public void Initialize()
         {
             _context.Database.Migrate();
 
-            if (_unitOfWork.GetRepository<IContactRepository>()!.ContainAnyElements())
+            if (_unitOfWork.GetRepository<IContactRepository>().ContainAnyElements())
             {
                 return;
             }
@@ -145,7 +138,7 @@ namespace Academits.Karetskas.PhoneBook
                     }
                 };
 
-                _unitOfWork.GetRepository<IContactRepository>()!.AddRange(ivanovII, PetrovPP, SidorovSS, OgurcovOO, PetrosyanPP, KirkorovKK);
+                _unitOfWork.GetRepository<IContactRepository>().AddRange(ivanovII, PetrovPP, SidorovSS, OgurcovOO, PetrosyanPP, KirkorovKK);
 
                 _unitOfWork.Save();
 

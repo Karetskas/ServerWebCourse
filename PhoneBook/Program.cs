@@ -4,11 +4,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using Academits.Karetskas.PhoneBook.BackgroundTasks;
-using Academits.Karetskas.PhoneBook.BusinessLogic.DataConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Academits.Karetskas.PhoneBook.DataAccess;
+using Academits.Karetskas.PhoneBook.BackgroundTasks;
+using Academits.Karetskas.PhoneBook.BusinessLogic.Excel;
 using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
 using Academits.Karetskas.PhoneBook.BusinessLogic.Handlers;
 using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories;
@@ -22,7 +22,8 @@ namespace Academits.Karetskas.PhoneBook
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string dbConnectionString = builder.Configuration.GetConnectionString("PhoneBookConnection") ?? "";
+            string dbConnectionString = builder.Configuration.GetConnectionString("PhoneBookConnection")
+                                        ?? throw new InvalidOperationException("The database connection string was not specified!");
             builder.Services.AddDbContext<PhoneBookDbContext>(options =>
             {
                 options.UseSqlServer(dbConnectionString)
@@ -30,14 +31,7 @@ namespace Academits.Karetskas.PhoneBook
             });
 
             builder.Services.AddControllersWithViews();
-            builder.Services.AddTransient<IExcel, Excel>();
-            builder.Services.AddHostedService<UploadContactsDaily>(provider =>
-            {
-                var path = builder.Configuration.GetValue<string>("BackgroundTasks:UploadContactsDaily");
-                var excel = provider.GetRequiredService<IExcel>();
-
-                return new UploadContactsDaily(path, excel, provider);
-            });
+            builder.Services.AddTransient<IExcelService, ExcelService>();
             builder.Services.AddTransient<DbInitializer>();
             builder.Services.AddTransient<GetContactsHandler>();
             builder.Services.AddTransient<AddContactHandler>();
@@ -47,6 +41,15 @@ namespace Academits.Karetskas.PhoneBook
             builder.Services.AddTransient<IContactRepository, ContactRepository>();
             builder.Services.AddTransient<IPhoneNumberRepository, PhoneNumberRepository>();
             builder.Services.AddTransient<IUnitOfWork, UnitOfWorkPhoneBook>();
+            builder.Services.AddTransient<CreateExcelDocumentWithAllContactsHandler>();
+
+            builder.Services.AddHostedService(provider =>
+            {
+                var path = builder.Configuration.GetValue<string>("BackgroundTasks:UploadContactsDaily");
+                var createExcelDocumentWithAllContactsHandler = provider.GetService<CreateExcelDocumentWithAllContactsHandler>();
+
+                return new UploadContactsDailyHostedService(path, createExcelDocumentWithAllContactsHandler!);
+            });
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>

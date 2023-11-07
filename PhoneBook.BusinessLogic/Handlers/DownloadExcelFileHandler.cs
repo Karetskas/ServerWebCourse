@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.IdentityModel.Tokens;
+﻿using PhoneBook.Utilities;
+using Academits.Karetskas.PhoneBook.BusinessLogic.Excel;
 using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
-using Academits.Karetskas.PhoneBook.BusinessLogic.DataConversion;
 using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
 namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
@@ -12,16 +11,18 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
         public DownloadExcelFileHandler(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), $"The argument \"{nameof(unitOfWork)}\" is null.");
+            ExceptionHandling.CheckArgumentForNull(unitOfWork);
+
+            _unitOfWork = unitOfWork;
         }
 
-        public byte[] Handler(string? searchFilterText)
+        public byte[] Handle(string? searchFilterText)
         {
-            var filterText = searchFilterText.IsNullOrEmpty() ? "" : searchFilterText;
-            var contactsCount = _unitOfWork.GetRepository<IContactRepository>()!.GetContactsCount(filterText);
-            var contacts = _unitOfWork.GetRepository<IContactRepository>()!.GetContacts(filterText, 1, contactsCount);
+            var filterText = searchFilterText ?? "";
+            var contactsCount = _unitOfWork.GetRepository<IContactRepository>().GetContactsCount(filterText);
+            var contacts = _unitOfWork.GetRepository<IContactRepository>().GetContacts(filterText, 1, contactsCount);
 
-            var excel = new Excel();
+            var excel = new ExcelService();
 
             return excel.GetDocument(contacts);
         }

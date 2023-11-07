@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using PhoneBook.Utilities;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.Dto;
@@ -15,18 +15,20 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
 
         public ContactRepository(PhoneBookDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext is null
-                ? throw new ArgumentNullException(nameof(dbContext), $"The argument \"{nameof(dbContext)}\" is null.")
-                : dbContext;
+            ExceptionHandling.CheckArgumentForNull(dbContext);
+
+            _dbContext = dbContext;
         }
 
         public List<ContactDto> GetContacts(string? searchFilterText, int pageNumber, int rowsCount)
         {
+            searchFilterText ??= "";
+
             return _dbContext.Set<Contact>()
                 .AsNoTracking()
-                .Where(contact => EF.Functions.Like(contact.FirstName, $"%{searchFilterText}%")
-                                  || EF.Functions.Like(contact.LastName, $"%{searchFilterText}%")
-                                  || contact.PhoneNumbers.Any(phoneNumber => EF.Functions.Like(phoneNumber.Phone, $"%{searchFilterText}%")))
+                .Where(contact => contact.FirstName.ToLower().Contains(searchFilterText)
+                                  || contact.LastName.ToLower().Contains(searchFilterText)
+                                  || contact.PhoneNumbers.Any(phoneNumber => phoneNumber.Phone.ToLower().Contains(searchFilterText)))
                 .OrderBy(contact => contact.LastName)
                 .ThenBy(contact => contact.FirstName)
                 .ThenBy(contact => contact.PhoneNumbers.OrderBy(phoneNumber => phoneNumber.Phone).FirstOrDefault()!.Phone)
@@ -51,13 +53,14 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
 
         public int GetContactsCount(string? searchFilterText)
         {
+            searchFilterText ??= "";
+
             return _dbContext
                 .Set<Contact>()
                 .AsNoTracking()
-                .Count(contact => EF.Functions.Like(contact.FirstName, $"%{searchFilterText}%")
-                                  || EF.Functions.Like(contact.LastName, $"%{searchFilterText}%")
-                                  || contact.PhoneNumbers.Any(phoneNumber =>
-                                      EF.Functions.Like(phoneNumber.Phone, $"%{searchFilterText}%")));
+                .Count(contact => contact.FirstName.ToLower().Contains(searchFilterText)
+                                  || contact.LastName.ToLower().Contains(searchFilterText)
+                                  || contact.PhoneNumbers.Any(phoneNumber => phoneNumber.Phone.ToLower().Contains(searchFilterText)));
         }
 
         public Contact[] FindAllContactsById(List<int> contactsId)

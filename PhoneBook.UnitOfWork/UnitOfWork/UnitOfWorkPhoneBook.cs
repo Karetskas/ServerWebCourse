@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Transactions;
+using PhoneBook.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,24 +18,16 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork
 
         public UnitOfWorkPhoneBook(PhoneBookDbContext dbContext, IServiceProvider serviceProvider)
         {
-            CheckArgument(dbContext);
-            CheckArgument(serviceProvider);
+            ExceptionHandling.CheckArgumentForNull(dbContext);
+            ExceptionHandling.CheckArgumentForNull(serviceProvider);
 
             _dbContext = dbContext;
             _serviceProvider = serviceProvider;
         }
 
-        private void CheckArgument(object? obj)
+        public T GetRepository<T>() where T : class, IRepository
         {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj), $"The argument \"{nameof(obj)}\" is null.");
-            }
-        }
-
-        public T? GetRepository<T>() where T : class, IRepository
-        {
-            return _serviceProvider.GetService<T>();
+            return _serviceProvider.GetRequiredService<T>();
         }
 
         public void Save()

@@ -7,7 +7,7 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork
     {
         void Save();
 
-        T? GetRepository<T>() where T : class, IRepository;
+        T GetRepository<T>() where T : class, IRepository;
 
         void BeginTransaction();
 

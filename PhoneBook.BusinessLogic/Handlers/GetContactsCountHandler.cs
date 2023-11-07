@@ -1,4 +1,4 @@
-﻿using System;
+﻿using PhoneBook.Utilities;
 using Microsoft.IdentityModel.Tokens;
 using Academits.Karetskas.PhoneBook.UnitOfWork.UnitOfWork;
 using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
@@ -11,14 +11,16 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
         public GetContactsCountHandler(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), $"The argument \"{nameof(unitOfWork)}\" is null.");
+            ExceptionHandling.CheckArgumentForNull(unitOfWork);
+
+            _unitOfWork = unitOfWork;
         }
 
-        public int Handler(string? searchFilterText)
+        public int Handle(string? searchFilterText)
         {
             var filterText = searchFilterText.IsNullOrEmpty() ? "" : searchFilterText;
 
-            return _unitOfWork.GetRepository<IContactRepository>()!.GetContactsCount(filterText);
+            return _unitOfWork.GetRepository<IContactRepository>().GetContactsCount(filterText);
         }
     }
 }

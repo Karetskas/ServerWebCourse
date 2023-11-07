@@ -49,7 +49,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneBook.Dto", "PhoneBook.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneBook.BusinessLogic", "PhoneBook.BusinessLogic\PhoneBook.BusinessLogic.csproj", "{1F2F26E5-853D-4CCA-AAAF-26B433C587AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBook.UnitOfWork", "PhoneBook.UnitOfWork\PhoneBook.UnitOfWork.csproj", "{15A3615E-3A97-4E0E-9F79-A752EE0A6063}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneBook.UnitOfWork", "PhoneBook.UnitOfWork\PhoneBook.UnitOfWork.csproj", "{15A3615E-3A97-4E0E-9F79-A752EE0A6063}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBook.Utilities", "PhoneBook.Utilities\PhoneBook.Utilities.csproj", "{B6E4704C-822D-4D78-9656-75C65087BB29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +143,10 @@ Global
 		{15A3615E-3A97-4E0E-9F79-A752EE0A6063}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15A3615E-3A97-4E0E-9F79-A752EE0A6063}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15A3615E-3A97-4E0E-9F79-A752EE0A6063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6E4704C-822D-4D78-9656-75C65087BB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6E4704C-822D-4D78-9656-75C65087BB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6E4704C-822D-4D78-9656-75C65087BB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6E4704C-822D-4D78-9656-75C65087BB29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +160,7 @@ Global
 		{D9085B10-653C-4A9A-BCC8-D92026C3DE47} = {FEE266AE-AF1B-4E85-BC50-A899EBBD92E9}
 		{1F2F26E5-853D-4CCA-AAAF-26B433C587AD} = {FEE266AE-AF1B-4E85-BC50-A899EBBD92E9}
 		{15A3615E-3A97-4E0E-9F79-A752EE0A6063} = {FEE266AE-AF1B-4E85-BC50-A899EBBD92E9}
+		{B6E4704C-822D-4D78-9656-75C65087BB29} = {FEE266AE-AF1B-4E85-BC50-A899EBBD92E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52C1B324-2EEC-45C2-9EEB-A6F2531A19CB}

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using PhoneBook.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.UnitOfWork.Repositories.Interfaces;
 
@@ -12,9 +12,9 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
 
         protected BaseEfRepository(DbContext dbContext)
         {
-            DbContext = dbContext is null
-                ? throw new ArgumentNullException(nameof(dbContext), $"The argument \"{nameof(dbContext)}\" is null.")
-                : dbContext;
+            ExceptionHandling.CheckArgumentForNull(dbContext);
+
+            DbContext = dbContext;
 
             DbSet = dbContext.Set<T>();
         }

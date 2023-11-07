@@ -27,6 +27,15 @@
                     {{$store.state.errorMessage.message}}
                 </v-alert>
 
+                <v-snackbar v-model="$store.state.toast.enabled"
+                            :timeout="2000"
+                            :color="$store.state.toast.color"
+                            elevation="10"
+                            centered
+                            transition="scale-transition">
+                    {{$store.state.toast.text}}
+                </v-snackbar>
+
                 <router-view></router-view>
             </main>
         </v-card>
@@ -53,5 +62,11 @@
         .button-font {
             font-size: 11px;
         }
+    }
+
+    .v-snack >>> .v-snack__content {
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
     }
 </style>

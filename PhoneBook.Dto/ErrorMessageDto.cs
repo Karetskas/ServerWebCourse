@@ -2,7 +2,7 @@
 {
     public sealed class ErrorMessageDto
     {
-        public TextFieldTypeDto FieldType { get; set; }
+        public TextFieldType FieldType { get; set; }
 
         public string? Message { get; set; }
     }

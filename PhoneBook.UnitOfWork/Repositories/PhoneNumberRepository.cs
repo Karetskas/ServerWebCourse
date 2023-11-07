@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using PhoneBook.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Academits.Karetskas.PhoneBook.DataAccess;
 using Academits.Karetskas.PhoneBook.DataAccess.Model;
@@ -13,9 +13,9 @@ namespace Academits.Karetskas.PhoneBook.UnitOfWork.Repositories
 
         public PhoneNumberRepository(PhoneBookDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext is null
-                ? throw new ArgumentNullException(nameof(dbContext), $"The argument \"{nameof(dbContext)}\" is null.")
-                : dbContext;
+            ExceptionHandling.CheckArgumentForNull(dbContext);
+
+            _dbContext = dbContext;
         }
 
         public bool HasPhoneNumberInContacts(string phone)

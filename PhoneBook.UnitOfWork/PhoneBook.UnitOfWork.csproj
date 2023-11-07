@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PhoneBook.DataAccess\PhoneBook.DataAccess.csproj" />
     <ProjectReference Include="..\PhoneBook.Dto\PhoneBook.Dto.csproj" />
+    <ProjectReference Include="..\PhoneBook.Utilities\PhoneBook.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

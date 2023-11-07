@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Academits.Karetskas.PhoneBook.Dto;
 
-namespace Academits.Karetskas.PhoneBook.BusinessLogic.DataConversion;
+namespace Academits.Karetskas.PhoneBook.BusinessLogic.Excel;
 
-public interface IExcel
+public interface IExcelService
 {
     void SaveDocument(string path, List<ContactDto> contacts);
 

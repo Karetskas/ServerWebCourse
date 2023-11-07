@@ -343,44 +343,44 @@
         },
 
         watch: {
-            'homePhoneTextField.disabled'(value) {
+            "homePhoneTextField.disabled"(value) {
                 if (!value) {
                     this.homePhoneTextField.phone = "";
                     this.homePhoneTextField.errorMessage = "";
                 }
             },
 
-            'workPhoneTextField.disabled'(value) {
+            "workPhoneTextField.disabled"(value) {
                 if (!value) {
                     this.workPhoneTextField.phone = "";
                     this.workPhoneTextField.errorMessage = "";
                 }
             },
 
-            'mobilePhoneTextField.disabled'(value) {
+            "mobilePhoneTextField.disabled"(value) {
                 if (!value) {
                     this.mobilePhoneTextField.phone = "";
                     this.mobilePhoneTextField.errorMessage = "";
                 }
             },
 
-            'firstNameTextField.text'() {
+            "firstNameTextField.text"() {
                 this.firstNameTextField.errorMessage = "";
             },
 
-            'lastNameTextField.text'() {
+            "lastNameTextField.text"() {
                 this.lastNameTextField.errorMessage = "";
             },
 
-            'homePhoneTextField.phone'() {
+            "homePhoneTextField.phone"() {
                 this.homePhoneTextField.errorMessage = "";
             },
 
-            'workPhoneTextField.phone'() {
+            "workPhoneTextField.phone"() {
                 this.workPhoneTextField.errorMessage = "";
             },
 
-            'mobilePhoneTextField.phone'() {
+            "mobilePhoneTextField.phone"() {
                 this.mobilePhoneTextField.errorMessage = "";
             }
         },
@@ -394,13 +394,13 @@
                 const maxColorComponentValue = 255;
                 const redComponent = 98;
                 const redComponentDivider = redComponent - maxColorComponentValue;
-                let red = this.getComponentColor(redComponent, redComponentDivider, value);
+                const red = this.getComponentColor(redComponent, redComponentDivider, value);
 
                 const greenComponent = 37;
-                let green = this.getComponentColor(greenComponent, greenComponent, value);
+                const green = this.getComponentColor(greenComponent, greenComponent, value);
 
                 const blueComponent = 178;
-                let blue = this.getComponentColor(blueComponent, blueComponent, value);
+                const blue = this.getComponentColor(blueComponent, blueComponent, value);
 
                 return ["rgb(" + red + ", " + green + ", " + blue + ", 1)"][0];
             },
@@ -432,13 +432,13 @@
             },
 
             addContact() {
-                let contact = {
+                const contact = {
                     lastName: this.lastNameTextField.text,
                     firstName: this.firstNameTextField.text,
                     phoneNumbers: []
                 };
 
-                let phoneNumbers = [this.homePhoneTextField, this.workPhoneTextField, this.mobilePhoneTextField];
+                const phoneNumbers = [this.homePhoneTextField, this.workPhoneTextField, this.mobilePhoneTextField];
 
                 for (let i = 0; i < phoneNumbers.length; i++) {
                     if (phoneNumbers[i].disabled === true) {
@@ -469,6 +469,12 @@
                             this.workPhoneTextField.disabled = false;
                             this.mobilePhoneTextField.phone = "";
                             this.mobilePhoneTextField.disabled = false;
+
+                            this.$store.dispatch("showToast", {
+                                enabled: true,
+                                text: "Contact has been added.",
+                                color: "green lighten-1"
+                            });
                         }
                     })
                     .catch(reject => {
@@ -502,6 +508,12 @@
                         this.mobilePhoneTextField.errorMessage = textField.message;
                         break;
                 }
+
+                this.$store.dispatch("showToast", {
+                    enabled: true,
+                    text: "Contact not added.",
+                    color: "red lighten-1"
+                });
             }
         }
     }

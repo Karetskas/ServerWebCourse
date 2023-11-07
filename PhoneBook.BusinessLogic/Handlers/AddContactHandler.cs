@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using PhoneBook.Utilities;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Academits.Karetskas.PhoneBook.Dto;
@@ -15,18 +16,20 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
         public AddContactHandler(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), $"The argument \"{nameof(unitOfWork)}\" is null.");
+            ExceptionHandling.CheckArgumentForNull(unitOfWork);
+
+            _unitOfWork = unitOfWork;
         }
 
-        public ErrorMessageDto[] Handler(ContactDto contact)
+        public ErrorMessageDto[] Handle(ContactDto contact)
         {
             var errorMessages = new ErrorMessageDto[]
             {
-                new() {FieldType = TextFieldTypeDto.FirstName, Message = "" },
-                new() {FieldType = TextFieldTypeDto.LastName, Message = "" },
-                new() {FieldType = TextFieldTypeDto.HomePhone, Message = "" },
-                new() {FieldType = TextFieldTypeDto.WorkPhone, Message = "" },
-                new() {FieldType = TextFieldTypeDto.MobilePhone, Message = "" }
+                new() {FieldType = TextFieldType.FirstName, Message = "" },
+                new() {FieldType = TextFieldType.LastName, Message = "" },
+                new() {FieldType = TextFieldType.HomePhone, Message = "" },
+                new() {FieldType = TextFieldType.WorkPhone, Message = "" },
+                new() {FieldType = TextFieldType.MobilePhone, Message = "" }
             };
 
             if (AreValidContactFields(contact, errorMessages))
@@ -42,7 +45,7 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
                     });
                 });
 
-                _unitOfWork.GetRepository<IContactRepository>()!.AddRange(new Contact
+                _unitOfWork.GetRepository<IContactRepository>().AddRange(new Contact
                 {
                     FirstName = contact.FirstName,
                     LastName = contact.LastName,
@@ -57,8 +60,8 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
         private bool AreValidContactFields(ContactDto? contact, ErrorMessageDto[]? errorMessages)
         {
-            CheckArgument(contact);
-            CheckArgument(errorMessages);
+            ExceptionHandling.CheckArgumentForNull(contact);
+            ExceptionHandling.CheckArgumentForNull(errorMessages);
 
             var hasErrorMessages = true;
 
@@ -68,21 +71,21 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
 
                 switch (errorMessage.FieldType)
                 {
-                    case TextFieldTypeDto.FirstName:
+                    case TextFieldType.FirstName:
                         (hasError, errorMessage.Message) = IsValidTextField(contact?.FirstName);
                         break;
-                    case TextFieldTypeDto.LastName:
+                    case TextFieldType.LastName:
                         (hasError, errorMessage.Message) = IsValidTextField(contact?.LastName);
                         break;
-                    case TextFieldTypeDto.HomePhone:
+                    case TextFieldType.HomePhone:
                         var homePhone = contact?.PhoneNumbers.FirstOrDefault(phoneNumber => phoneNumber.PhoneType == PhoneNumberType.Home)?.Phone;
                         (hasError, errorMessage.Message) = IsValidPhoneNumberField(homePhone);
                         break;
-                    case TextFieldTypeDto.WorkPhone:
+                    case TextFieldType.WorkPhone:
                         var workPhone = contact?.PhoneNumbers.FirstOrDefault(phoneNumber => phoneNumber.PhoneType == PhoneNumberType.Work)?.Phone;
                         (hasError, errorMessage.Message) = IsValidPhoneNumberField(workPhone);
                         break;
-                    case TextFieldTypeDto.MobilePhone:
+                    case TextFieldType.MobilePhone:
                         var mobilePhone = contact?.PhoneNumbers.FirstOrDefault(phoneNumber => phoneNumber.PhoneType == PhoneNumberType.Mobile)?.Phone;
                         (hasError, errorMessage.Message) = IsValidPhoneNumberField(mobilePhone);
                         break;
@@ -96,7 +99,7 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
             return hasErrorMessages;
         }
 
-        private (bool, string) IsValidTextField(string? text)
+        private static (bool, string) IsValidTextField(string? text)
         {
             if (text is null)
             {
@@ -150,7 +153,7 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
                 return (false, "Allowed characters: (, ), +, -, 0-9, dots and spaces!");
             }
 
-            var hasNumber = _unitOfWork.GetRepository<IPhoneNumberRepository>()!
+            var hasNumber = _unitOfWork.GetRepository<IPhoneNumberRepository>()
                 .HasPhoneNumberInContacts(text);
 
             if (hasNumber)
@@ -159,14 +162,6 @@ namespace Academits.Karetskas.PhoneBook.BusinessLogic.Handlers
             }
 
             return (true, "");
-        }
-
-        private void CheckArgument(object? obj)
-        {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj), $"The argument \"{nameof(obj)}\" is null.");
-            }
         }
     }
 }

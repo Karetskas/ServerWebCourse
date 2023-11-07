@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
   </ItemGroup>
 
@@ -15,6 +16,7 @@
     <ProjectReference Include="..\PhoneBook.DataAccess\PhoneBook.DataAccess.csproj" />
     <ProjectReference Include="..\PhoneBook.Dto\PhoneBook.Dto.csproj" />
     <ProjectReference Include="..\PhoneBook.UnitOfWork\PhoneBook.UnitOfWork.csproj" />
+    <ProjectReference Include="..\PhoneBook.Utilities\PhoneBook.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

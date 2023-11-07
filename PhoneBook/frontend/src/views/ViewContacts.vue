@@ -11,7 +11,7 @@
                 <v-data-table v-model="selectedContacts"
                               :headers="headers"
                               :items="checkContacts"
-                              :items-per-page="rowsCount"
+                              :items-per-page="pageSize"
                               :loading="$store.state.isLoading"
                               loading-text="Loading... Please wait!"
                               item-key="serialNumber"
@@ -121,6 +121,7 @@
 
                                 <v-col cols="12" sm="10" class="d-flex align-center my-4">
                                     <v-text-field v-model.trim="enteredFilterText"
+                                                  @keyup.enter="filterContacts"
                                                   outlined
                                                   dense
                                                   label="Search filter"
@@ -131,7 +132,7 @@
                                                   class="text-field-color font-weight-bold rounded-r-0 rounded-xl">
                                     </v-text-field>
 
-                                    <v-btn @click="clearSearchFilter()"
+                                    <v-btn @click="clearSearchFilter"
                                            elevation="0"
                                            tile
                                            x-small
@@ -212,7 +213,7 @@
                                 <v-spacer></v-spacer>
 
                                 <v-col cols="6" sm="2" class="d-flex align-center">
-                                    <v-autocomplete v-model="rowsCount"
+                                    <v-autocomplete v-model="pageSize"
                                                     :items="itemsPerPageCount"
                                                     @change="getContacts(undefined, 1, undefined)"
                                                     color="deep-purple darken-1"
@@ -288,13 +289,13 @@
                 return this.checkContacts.length === 0;
             },
 
-            rowsCount: {
+            pageSize: {
                 get() {
-                    return this.$store.state.page.rowsCount;
+                    return this.$store.state.page.pageSize;
                 },
 
                 set(value) {
-                    this.$store.commit('setRowsCount', value);
+                    this.$store.commit("setPageSize", value);
                 }
             },
 
@@ -352,11 +353,11 @@
 
             getContacts(searchFilterText = this.$store.state.searchFilterText,
                 pageNumber = this.$store.state.page.pageNumber,
-                rowsCount = this.$store.state.page.rowsCount) {
-                let page = {
+                pageSize = this.$store.state.page.pageSize) {
+                const page = {
                     searchFilterText: searchFilterText,
                     pageNumber: pageNumber,
-                    rowsCount: rowsCount
+                    pageSize: pageSize
                 }
 
                 this.$store.dispatch("loadContacts", page);
@@ -393,6 +394,12 @@
 
                 this.$store.dispatch("deleteContacts", this.contactsToDelete.map(contact => contact.id))
                     .then(() => {
+                        this.$store.dispatch("showToast", {
+                            enabled: true,
+                            text: "Contacts have been deleted.",
+                            color: "green lighten-1"
+                        });
+
                         if (this.contactsToDelete.length > 1) {
                             this.selectedContacts = [];
                             this.contactsToDelete = [];
@@ -400,7 +407,7 @@
                             return;
                         }
 
-                        let contacts = JSON.parse(JSON.stringify(this.selectedContacts));
+                        const contacts = JSON.parse(JSON.stringify(this.selectedContacts));
                         this.selectedContacts = [];
 
                         this.selectedContacts = contacts
@@ -418,27 +425,7 @@
             },
 
             downloadExcelFile() {
-                this.$store.dispatch("downloadExcelFile")
-                    .then(response => {
-                        if (response === null) {
-                            this.$store.commit("enableErrorMessage", "The file was not created!");
-
-                            return;
-                        }
-
-                        let blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                        let url = window.URL.createObjectURL(blob);
-
-                        let anchor = document.createElement("a");
-                        anchor.style.display = "none";
-                        anchor.href = url;
-                        anchor.setAttribute("download", "PhoneBook.xlsx")
-                        document.body.appendChild(anchor);
-                        anchor.click();
-                        anchor.remove();
-
-                        URL.revokeObjectURL(url);
-                    });
+                window.open("/api/PhoneBook/downloadExcelFile?searchFilterText=" + this.$store.state.searchFilterText, "_blank");
             }
         }
     }

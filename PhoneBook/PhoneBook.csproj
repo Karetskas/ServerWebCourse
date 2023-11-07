@@ -20,6 +20,7 @@
     <ProjectReference Include="..\PhoneBook.BusinessLogic\PhoneBook.BusinessLogic.csproj" />
     <ProjectReference Include="..\PhoneBook.DataAccess\PhoneBook.DataAccess.csproj" />
     <ProjectReference Include="..\PhoneBook.UnitOfWork\PhoneBook.UnitOfWork.csproj" />
+    <ProjectReference Include="..\PhoneBook.Utilities\PhoneBook.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

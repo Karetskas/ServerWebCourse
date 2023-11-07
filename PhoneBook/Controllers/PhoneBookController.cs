@@ -1,4 +1,4 @@
-﻿using System;
+﻿using PhoneBook.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Academits.Karetskas.PhoneBook.Dto;
@@ -10,61 +10,46 @@ namespace Academits.Karetskas.PhoneBook.Controllers
     [Route("api/[controller]/[action]")]
     public class PhoneBookController : ControllerBase
     {
-        private readonly GetContactsHandler _getContactsHandler;
-        private readonly AddContactHandler _addContactHandler;
-        private readonly GetContactsCountHandler _getContactsCountHandler;
-        private readonly DeleteContactsHandler _deleteContactsHandler;
-        private readonly DownloadExcelFileHandler _downloadExcelFileHandler;
-
-        public PhoneBookController(GetContactsHandler getContactsHandler, AddContactHandler addContactHandler, GetContactsCountHandler getContactsCountHandler,
-            DeleteContactsHandler deleteContactsHandler, DownloadExcelFileHandler downloadExcelFileHandler)
+        [HttpGet]
+        public List<ContactDto> GetContacts([FromServices] GetContactsHandler getContactsHandler, [FromQuery] string? searchFilterText, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            _getContactsHandler = getContactsHandler ?? throw new ArgumentNullException(nameof(getContactsHandler),
-                $"The argument \"{nameof(getContactsHandler)}\" is null.");
+            ExceptionHandling.CheckArgumentForNull(getContactsHandler);
 
-            _addContactHandler = addContactHandler ?? throw new ArgumentNullException(nameof(addContactHandler),
-                $"The argument \"{nameof(getContactsHandler)}\" is null.");
-
-            _getContactsCountHandler = getContactsCountHandler ?? throw new ArgumentNullException(nameof(getContactsCountHandler),
-                $"The argument \"{nameof(getContactsCountHandler)}\" is null.");
-
-            _deleteContactsHandler = deleteContactsHandler ?? throw new ArgumentNullException(nameof(deleteContactsHandler),
-                $"The argument \"{nameof(deleteContactsHandler)}\" is null.");
-
-            _downloadExcelFileHandler = downloadExcelFileHandler ?? throw new ArgumentNullException(nameof(downloadExcelFileHandler),
-                $"The argument \"{nameof(downloadExcelFileHandler)}\" is null.");
+            return getContactsHandler.Handle(searchFilterText, pageNumber, pageSize);
         }
 
         [HttpGet]
-        public List<ContactDto> GetContacts([FromQuery] string? searchFilterText, [FromQuery] int pageNumber, [FromQuery] int rowsCount)
+        public int GetContactsCount([FromServices] GetContactsCountHandler getContactsCountHandler, [FromQuery] string? searchFilterText)
         {
-            return _getContactsHandler.Handler(searchFilterText, pageNumber, rowsCount);
+            ExceptionHandling.CheckArgumentForNull(getContactsCountHandler);
+
+            return getContactsCountHandler.Handle(searchFilterText);
         }
 
         [HttpGet]
-        public int GetContactsCount([FromQuery] string? searchFilterText)
+        public FileContentResult DownloadExcelFile([FromServices] DownloadExcelFileHandler downloadExcelFileHandler, [FromQuery] string? searchFilterText)
         {
-            return _getContactsCountHandler.Handler(searchFilterText);
-        }
+            ExceptionHandling.CheckArgumentForNull(downloadExcelFileHandler);
 
-        [HttpGet]
-        public FileContentResult DownloadExcelFile([FromQuery] string? searchFilterText)
-        {
-            var content = _downloadExcelFileHandler.Handler(searchFilterText);
+            var content = downloadExcelFileHandler.Handle(searchFilterText);
 
             return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PhoneBool.xlsx");
         }
 
         [HttpPost]
-        public ErrorMessageDto[] AddContact(ContactDto contact)
+        public ErrorMessageDto[] AddContact([FromServices] AddContactHandler addContactHandler, ContactDto contact)
         {
-            return _addContactHandler.Handler(contact);
+            ExceptionHandling.CheckArgumentForNull(addContactHandler);
+
+            return addContactHandler.Handle(contact);
         }
 
         [HttpPost]
-        public void DeleteContacts(List<int> contactsId)
+        public void DeleteContacts([FromServices] DeleteContactsHandler deleteContactsHandler, List<int> contactsId)
         {
-            _deleteContactsHandler.Handler(contactsId);
+            ExceptionHandling.CheckArgumentForNull(deleteContactsHandler);
+
+            deleteContactsHandler.Handle(contactsId);
         }
     }
 }
