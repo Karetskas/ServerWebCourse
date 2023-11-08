@@ -51,7 +51,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneBook.BusinessLogic", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneBook.UnitOfWork", "PhoneBook.UnitOfWork\PhoneBook.UnitOfWork.csproj", "{15A3615E-3A97-4E0E-9F79-A752EE0A6063}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBook.Utilities", "PhoneBook.Utilities\PhoneBook.Utilities.csproj", "{B6E4704C-822D-4D78-9656-75C65087BB29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneBook.Utilities", "PhoneBook.Utilities\PhoneBook.Utilities.csproj", "{B6E4704C-822D-4D78-9656-75C65087BB29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsService", "WindowsService\WindowsService.csproj", "{F45E6C14-152F-47DE-B7EE-AC8A5749FBA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{B6E4704C-822D-4D78-9656-75C65087BB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6E4704C-822D-4D78-9656-75C65087BB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6E4704C-822D-4D78-9656-75C65087BB29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F45E6C14-152F-47DE-B7EE-AC8A5749FBA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45E6C14-152F-47DE-B7EE-AC8A5749FBA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45E6C14-152F-47DE-B7EE-AC8A5749FBA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45E6C14-152F-47DE-B7EE-AC8A5749FBA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
